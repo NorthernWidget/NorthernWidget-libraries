@@ -1,0 +1,31 @@
+#######################################
+# Syntax Coloring Map Logger
+#######################################
+
+#######################################
+# Datatypes (KEYWORD1)
+#######################################
+
+TP_Downhole	KEYWORD1	TP_Downhole
+
+#######################################
+# Methods and Functions (KEYWORD2)
+#######################################
+
+getTemperature	KEYWORD2
+getPressure		KEYWORD2
+begin			KEYWORD2
+
+
+#######################################
+# Constants (LITERAL1)
+#######################################
+
+TP2v0	LITERAL1
+TP2v1	LITERAL1
+TP5v1	LITERAL1
+TP2v2	LITERAL1
+TP5v2	LITERAL1
+TP2b2	LITERAL1
+TP2A2	LITERAL1
+

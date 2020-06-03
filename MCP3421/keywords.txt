@@ -1,0 +1,28 @@
+#######################################
+# Syntax Coloring Map Logger
+#######################################
+
+#######################################
+# Datatypes (KEYWORD1)
+#######################################
+
+MCP3421	KEYWORD1	MCP3421
+
+#######################################
+# Methods and Functions (KEYWORD2)
+#######################################
+
+SetResolution	KEYWORD2
+SetGain			KEYWORD2
+GetVoltage 		KEYWORD2
+GetVoltageRaw	KEYWORD2
+SetMode			KEYWORD2
+Begin			KEYWORD2
+
+
+#######################################
+# Constants (LITERAL1)
+#######################################
+
+SINGLE_SHOT	LITERAL1
+CONTINUIOUS	LITSRAL1

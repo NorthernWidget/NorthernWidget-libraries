@@ -1,0 +1,13 @@
+Margay File Structure
+
+SD:.
+├───NW
+│   ├───SN#1
+│   |	├───HWTest.txt
+|	|	└───Logs
+|	|		├───Log1.txt
+|	|		└───...
+│   ├───SN#2
+│   └───...
+|	
+...

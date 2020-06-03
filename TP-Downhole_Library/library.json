@@ -1,0 +1,32 @@
+{
+    "name": "TP_Downhole",
+    "version": "0.1.0",
+    "description":  "Interface for the TP-Downhole series of sensors",
+    "keywords": "sensor, sensors, MS5803, NorthernWidget, TP-Downhole",
+    "platforms": "atmelavr, atmelsam",
+    "frameworks": "arduino",
+    "authors":
+    [
+        {
+            "name": "Bobby Schulz",
+            "email": "schu3119@umn.edu",
+            "maintainer": true
+        }
+    ],
+    "repository":
+    {
+        "type": "git",
+        "url": "https://github.com/NorthernWidget/TP-DownHole"
+    },
+    "export":
+    {
+        "exclude":
+        [
+            "docs/*"
+        ]
+    },
+    "examples":
+    [
+        "examples/*/*.ino"
+    ]
+}

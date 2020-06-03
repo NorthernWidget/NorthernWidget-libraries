@@ -1,0 +1,45 @@
+{
+    "name": "MS5803",
+    "version": "0.1.2",
+    "description":  "General interface to MS5803-series pressure transducers.",
+    "keywords": "sensor, sensors, MS5803, EnviroDIY",
+    "platforms": "atmelavr, atmelsam",
+    "frameworks": "arduino",
+    "authors":
+    [
+        {
+            "name": "Bobby Schulz",
+            "email": "schu3119@umn.edu",
+            "maintainer": true
+        },
+        {
+            "name": "Andrew Wickert",
+            "email": "awickert@umn.edu"
+        },
+        {
+            "name": "Chad Sandell",
+            "email": "sand0724@umn.edu"
+        },
+        {
+            "name": "Sara Damiano",
+            "email": "sdamiano@stroudcenter.org",
+            "url": "https://envirodiy.org/"
+        }
+    ],
+    "repository":
+    {
+        "type": "git",
+        "url": "https://github.com/EnviroDIY/MS5803.git"
+    },
+    "export":
+    {
+        "exclude":
+        [
+            "docs/*"
+        ]
+    },
+    "examples":
+    [
+        "examples/*/*.ino"
+    ]
+}

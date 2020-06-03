@@ -1,0 +1,34 @@
+#######################################
+# Syntax Coloring Map Logger
+#######################################
+
+#######################################
+# Datatypes (KEYWORD1)
+#######################################
+
+Margay	KEYWORD1
+
+#######################################
+# Methods and Functions (KEYWORD2)
+#######################################
+
+begin			KEYWORD2
+LogStr			KEYWORD2
+LED_Color 		KEYWORD2
+Run				KEYWORD2
+
+#######################################
+# Constants (LITERAL1)
+#######################################
+
+RED		LITERAL1
+GREEN	LITSRAL1
+BLUE	LITSRAL1
+MAROON	LITSRAL1
+GOLD	LITSRAL1
+ORANGE	LITSRAL1
+PURPLE	LITSRAL1
+CYAN	LITSRAL1
+BLACK_ALERT LITSRAL1
+OFF		LITSRAL1
+
