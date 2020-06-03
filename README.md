@@ -39,11 +39,17 @@ To view the libraries on Mac, you have to open the contents of your **ArduinoNNN
 
 *Libraries location within Arduino app package:* `Contents/Resources/Java/libraries`
 
-### Download
+### Download and extract contents
 
+1. Click on the green "Clone or download" button on this page.
+2. Click "Download ZIP"
+3. Open the ZIP file. It should contain one folder titled "NorthernWidget-libraries-master"
+4. Enter "NorthernWidget-libraries-master" to view all of its subfolders. Each is a library.
+5. Extract the contents of your archive to the folder listed above. If this is not directly possible (perhaps for Mac), extract the contents to a temporary folder and then cut/paste them to the "libraries" folder.
 
-### Copy/paste contents
+At this point, you should have all the libraries required to compile any Northern Widget code. If you have problems, please [open an issue](https://github.com/NorthernWidget-Skunkworks/NorthernWidget-libraries/issues).
 
+If you are running the Arduino IDE, you will need to restart it in order to for the changes to take effect.
 
 ## External resources
 
