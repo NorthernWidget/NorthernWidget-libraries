@@ -49,14 +49,14 @@ class Haar
 
 	  /**
 	   * @brief Return the currently stored pressure [in mBar]
-	   * @param[in] Update: Read and store a new pressure value before sending?
+	   * @param[in] update: Read and store a new pressure value before sending?
 	   * By default is false; simply returns the already-available pressure value.
 	   */
 		float getPressure(bool update = false);
 
 	  /**
 	   * @brief Return the currently stored relative humidity [%]
-	   * @param[in] Update: Read and store a new pressure value before sending?
+	   * @param[in] update: Read and store a new pressure value before sending?
 	   * By default is false; simply returns the already-available RH value.
 	   */
 		float getHumidity(bool update = false);
@@ -67,7 +67,7 @@ class Haar
 	   * temperature. Input can be `RH_Sense`, which corresponds to a 0, or
 	   * `Pres_Sense`, which corresponds to a 1. By default, this is RH_Sense,
 	   * as this sensor has a better internal temperature sensor.
-	   * @param[in] Update: Read and store a new pressure value before sending?
+	   * @param[in] update: Read and store a new pressure value before sending?
 	   * By default is false; simply returns the already-available temperature
      * value.
 	   */
@@ -86,7 +86,7 @@ class Haar
 	   * @param Block: if `true`, wait for data to be returned.
 	   * Defaults to `false`.
 	   */
-		uint8_t requestSample(bool block = false); //Default to non-blocking
+		uint8_t updateMeasurements(bool block = false); //Default to non-blocking
 
 	  /**
 	   * @brief Checks for updated data. Returns `true` if new data are available;

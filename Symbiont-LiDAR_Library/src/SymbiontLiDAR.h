@@ -136,12 +136,13 @@ class SymbiontLiDAR
         // Initialize at a non-error value; just one that indicates that
         // they are unset (will be returned if requested before measurement
         // is taken)
-        static float Range = -9998;
-        static float Pitch = -9998;
-        static float Roll = -9998;
+        float Range = -9998;
+        float Pitch = -9998;
+        float Roll = -9998;
         
         // Sensor sensitivity; set initially to default "balanced" mode
-        static uint8_t sensitivity = sensitivityBalanced;
+        uint8_t sensitivity = sensitivityBalanced;
 };
 
 #endif
+

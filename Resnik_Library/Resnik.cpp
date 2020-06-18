@@ -90,8 +90,8 @@ int Resnik::begin(uint8_t *Vals, uint8_t NumVals, String Header_)
 
 	I2CState(INTERNAL);
 	// NumADR_OB = 2; //DEBUG!
-	RTC.Begin(); //Initalize RTC
-	RTC.ClearAlarm(); //
+	RTC.begin(); //Initalize RTC
+	RTC.clearAlarm(); //
 	ADC_OB.begin();
 	ADC_Ext.begin();
 	DAC.begin(0x62);
@@ -133,7 +133,7 @@ int Resnik::begin(uint8_t *Vals, uint8_t NumVals, String Header_)
 			DateTimeVals[i] = DateTimeTemp.substring(2*i, 2*(i+1)).toInt();
 			Serial.print(i); Serial.print("  "); Serial.println(DateTimeVals[i]);  //DEBUG!
 		}
-		RTC.SetTime(2000 + DateTimeVals[0], DateTimeVals[1], DateTimeVals[2], DateTimeVals[3], DateTimeVals[4], DateTimeVals[5]);
+		RTC.setTime(2000 + DateTimeVals[0], DateTimeVals[1], DateTimeVals[2], DateTimeVals[3], DateTimeVals[4], DateTimeVals[5]);
 	}
 
 	GetTime(); //Get time to pass to computer 
@@ -359,20 +359,20 @@ void Resnik::ClockTest()
 
 	if(Error == 0) {
 		GetTime(); //FIX!
-		TestSeconds = RTC.GetValue(5);
+		TestSeconds = RTC.getValue(5);
 		// PowerAux(OFF); //Switch of auxilary power
 	  	delay(1100);
 	  	// PowerAuto(); //Turn any power back on
-	  	if(RTC.GetValue(5) == TestSeconds) {
+	  	if(RTC.getValue(5) == TestSeconds) {
 	  		OBError = true; //If clock is not incrementing 
 	  		OscStop = true; //Oscilator not running
 	  	}
 	}
 
-	unsigned int YearNow = RTC.GetValue(0);
+	unsigned int YearNow = RTC.getValue(0);
 
 	if(YearNow == 00) {  //If value is 2000, work around Y2K bug by setting time to Jan 1st, midnight, 2049
-		// if(YearNow <= 00) RTC.SetTime(2018, 01, 01, 00, 00, 00);  //Only reset if Y2K
+		// if(YearNow <= 00) RTC.setTime(2018, 01, 01, 00, 00, 00);  //Only reset if Y2K
 		// GetTime(); //Update local time
 		TimeError = true;
 		Serial.println(" PASS, BAD TIME");
@@ -541,7 +541,7 @@ void Resnik::GetTime()
 	//Update global time string
 	// DateTime TimeStamp = RTC.now();
 	// LogTimeDate = String(TimeStamp.year()) + "/" + String(TimeStamp.month()) + "/" + String(TimeStamp.day()) + " " + String(TimeStamp.hour()) + ":" + String(TimeStamp.minute()) + ":" + String(TimeStamp.second());  
-	LogTimeDate = RTC.GetTime(0);
+	LogTimeDate = RTC.getTime(0);
 }
 
 // float Resnik::EnviroStats()
@@ -549,7 +549,7 @@ void Resnik::GetTime()
 // 	Pres = EnviroSense.GetPressure();
 // 	RH = EnviroSense.GetHumidity();
 // 	Temp_BME = EnviroSense.GetTemperature();
-// 	Temp_RTC = RTC.GetTemp();  //Get Temp from RTC
+// 	Temp_RTC = RTC.getTemp();  //Get Temp from RTC
 // }
 
 // float Resnik::GetBatVoltage()
@@ -622,7 +622,7 @@ String Resnik::GetOnBoardVals()
 	float ISolar = ADC_OB.readADC_SingleEnded(1)*0.01875;  //FIX! Adjust after changing gain of amp??
 	float IBeta = (ADC_OB.readADC_SingleEnded(3)*0.1875 - 2500)/1.5;
 
-	float RTCTemp = RTC.GetTemp();  //Get Temp from RTC
+	float RTCTemp = RTC.getTemp();  //Get Temp from RTC
 	GetTime(); //FIX!
 	// if(Model< Model_2v0) return LogTimeDate + "," + String(RTCTemp) + "," + String(VBeta) + ",";
 	return LogTimeDate + "," + String(EnviroSense.GetString()) + String(RTCTemp) + "," + String(VBeta) + "," + String(VPrime) + "," + String(ISolar) + "," + String(IBeta) + ",";
@@ -704,7 +704,7 @@ void Resnik::Run(String (*Update)(void), unsigned long LogInterval) //Pass in fu
 		// Serial.println("Log Started!"); //DEBUG
 		// LogEvent = true;
 		// unsigned long TempLogInterval = LogInterval; //ANDY, Fix with addition of function??
-		RTC.SetAlarm(LogInterval); //DEBUG!
+		RTC.setAlarm(LogInterval); //DEBUG!
 		InitLogFile(); //Start a new file each time log button is pressed
 
 		//Add inital data point 
@@ -717,7 +717,7 @@ void Resnik::Run(String (*Update)(void), unsigned long LogInterval) //Pass in fu
 	if(LogEvent) {
 		//TEST WHICH TIMER TRIGGERED LOG
 		// Serial.println("Log!"); //DEBUG!
-		// RTC.SetAlarm(LogInterval);  //Set/reset alarm //DEBUG!
+		// RTC.setAlarm(LogInterval);  //Set/reset alarm //DEBUG!
 		AddDataPoint(Update); //Write values to SD
 		if(LogCount >= LogCountPush) {  //REPLACE WITH TIMER TEST!
 			// for(int i = 0; i < 10; i++) {  //DEBUG!
@@ -738,7 +738,7 @@ void Resnik::Run(String (*Update)(void), unsigned long LogInterval) //Pass in fu
 		}
 		LogEvent = false; //Clear log flag
 		// Serial.println("BANG!"); //DEBUG!
-		RTC.SetAlarm(LogInterval);  //Set/reset alarm
+		RTC.setAlarm(LogInterval);  //Set/reset alarm
 		// Serial.println("ResetTimer"); //DEBUG!
 		// ResetWD(); //Clear alarm
 	}
@@ -752,7 +752,7 @@ void Resnik::Run(String (*Update)(void), unsigned long LogInterval) //Pass in fu
 
 	if(!digitalRead(RTCInt)) {  //Catch alarm if not reset properly 
    		Serial.println("Reset Alarm"); //DEBUG!
-		RTC.SetAlarm(LogInterval); //Turn alarm back on 
+		RTC.setAlarm(LogInterval); //Turn alarm back on 
 	}
 
 	AwakeCount++;
@@ -864,10 +864,10 @@ void Resnik::DateTimeSD(uint16_t* date, uint16_t* time)
 	// Serial.println(timestamp);
 	// return date using FAT_DATE macro to format fields
 	// Serial.println(selfPointer->RTC.GetValue(0)); //DEBUG!
-	*date = FAT_DATE(selfPointer->RTC.GetValue(0) + 2000, selfPointer->RTC.GetValue(1), selfPointer->RTC.GetValue(2));
+	*date = FAT_DATE(selfPointer->RTC.getValue(0) + 2000, selfPointer->RTC.getValue(1), selfPointer->RTC.getValue(2));
 
 	// return time using FAT_TIME macro to format fields
-	*time = FAT_TIME(selfPointer->RTC.GetValue(3), selfPointer->RTC.GetValue(4), selfPointer->RTC.GetValue(5));
+	*time = FAT_TIME(selfPointer->RTC.getValue(3), selfPointer->RTC.getValue(4), selfPointer->RTC.getValue(5));
 }
 
 void Resnik::DateTimeSD_Glob(uint16_t* date, uint16_t* time) {selfPointer->DateTimeSD(date, time);}  //Fix dumb name!

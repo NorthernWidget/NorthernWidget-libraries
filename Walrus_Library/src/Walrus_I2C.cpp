@@ -31,11 +31,7 @@ float Walrus::getTemperature(uint8_t Location) //Returns temp in C from either s
     uint8_t Offset = 0; //Default to TEMP_REG_0
     int Error = 0; //Error used for testing transmission
     if(Location == 1) Offset = 0x03;
-    // Wire.beginTransmission(ADR);
-    // Wire.write(TEMP_REG_0 + Offset);
-    // Error = Wire.endTransmission();
 
-    // Wire.requestFrom(ADR, 3); //Read 3 bytes from device
     for(int i = 0; i < TEMP_OFFSET; i++) { //Increment over read
         Wire.beginTransmission(ADR);
         Wire.write(TEMP_REG_0 + Offset + i);
@@ -43,13 +39,16 @@ float Walrus::getTemperature(uint8_t Location) //Returns temp in C from either s
         Wire.requestFrom((int)ADR, 1); //Cast ADR to match function
         TempData[i] = Wire.read(); //Read in data
     }
-    // Serial.print("\n\n"); //DEBUG!
-    // Serial.println(TEMP_REG_0 + Offset, HEX);
-    // Serial.println(TempData[2], HEX);
-    // Serial.println(TempData[1], HEX);
-    // Serial.println(TempData[0], HEX);
-    if(Error == 0) return float(long((TempData[2] << 16) | (TempData[1] << 8) | (TempData[0])))/1000.0; //If no error, return concatonated, scaled value
-    else return -9999.0; //Else return error condition
+    if(Error == 0){
+        //If no error, return concatonated, scaled value
+        return float( long( (TempData[2] << 16) |
+                            (TempData[1] << 8 ) |
+                            (TempData[0]) ) ) / 1000.0;
+    }
+    else{
+        // Else return error condition
+        return -9999.0;
+    }
 }
 
 
@@ -76,16 +75,24 @@ float Walrus::getPressure()
         TempData[i] = Wire.read(); //Read in data
     }
 
-    if(Error == 0) return float(long((TempData[2] << 16) | (TempData[1] << 8) | (TempData[0])))/1000.0; //If no error, return concatonated, scaled value
-    else return -9999.0; //Else return error condition
+    if(Error == 0){
+        //If no error, return concatonated, scaled value
+        return float( long( (TempData[2] << 16) |
+                            (TempData[1] << 8) |
+                            (TempData[0]) ) ) / 1000.0;
+    }
+    else{
+        //Else return error condition
+        return -9999.0;
+    }
 }
 
-String Walrus::GetHeader()
+String Walrus::getHeader()
 {
     return "Pressure [mBar],Temp DH [C],Temp DHt [C],"; //return header string
 }
 
-String Walrus::GetString()
+String Walrus::getString()
 {
     //Return data string
     return String(getPressure()) + "," + String(getTemperature(0)) + "," \

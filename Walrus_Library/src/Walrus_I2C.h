@@ -78,14 +78,14 @@ class Walrus
          * @brief Return header
          * @details "Pressure [mBar],Temp DH [C],Temp DHt [C],"
          */
-        String GetHeader();
+        String getHeader();
 
         /**
          * @brief Return measurement data as a string
          * @details String(getPressure()) + "," + String(getTemperature(0))
          + "," + String(getTemperature(1)) + ",";
          */
-        String GetString();
+        String getString();
 
     private:
         uint8_t ADR = ADR_DEFAULT; //Default address

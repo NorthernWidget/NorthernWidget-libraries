@@ -187,8 +187,8 @@ int Margay::begin(uint8_t *Vals, uint8_t NumVals, String Header_)
   }
 	
 	// NumADR_OB = 2; //DEBUG!
-	RTC.Begin(); //Initalize RTC
-	RTC.ClearAlarm(); //
+	RTC.begin(); //Initalize RTC
+	RTC.clearAlarm(); //
 	adc.Begin(I2C_ADR_OB[1]); //Initalize external ADC
 	adc.SetResolution(18);
 	EnviroSense.begin(0x77); //Initalize onboard temp/pressure/RH sensor (BME280)
@@ -226,7 +226,7 @@ int Margay::begin(uint8_t *Vals, uint8_t NumVals, String Header_)
 			DateTimeVals[i] = DateTimeTemp.substring(2*i, 2*(i+1)).toInt();
 			Serial.print(i); Serial.print("  "); Serial.println(DateTimeVals[i]);  //DEBUG!
 		}
-		RTC.SetTime(2000 + DateTimeVals[0], DateTimeVals[1], DateTimeVals[2], DateTimeVals[3], DateTimeVals[4], DateTimeVals[5]);
+		RTC.setTime(2000 + DateTimeVals[0], DateTimeVals[1], DateTimeVals[2], DateTimeVals[3], DateTimeVals[4], DateTimeVals[5]);
 	}
 
 	GetTime(); //Get time to pass to computer 
@@ -454,18 +454,18 @@ void Margay::ClockTest()
 
 	if(Error == 0) {
 		GetTime(); //FIX!
-		TestSeconds = RTC.GetValue(5);
+		TestSeconds = RTC.getValue(5);
 	  	delay(1100);
-	  	if(RTC.GetValue(5) == TestSeconds) {
+	  	if(RTC.getValue(5) == TestSeconds) {
 	  		OBError = true; //If clock is not incrementing 
 	  		OscStop = true; //Oscilator not running
 	  	}
 	}
 
-	unsigned int YearNow = RTC.GetValue(0);
+	unsigned int YearNow = RTC.getValue(0);
 
 	if(YearNow == 00) {  //If value is 2000, work around Y2K bug by setting time to Jan 1st, midnight, 2049
-		// if(YearNow <= 00) RTC.SetTime(2018, 01, 01, 00, 00, 00);  //Only reset if Y2K
+		// if(YearNow <= 00) RTC.setTime(2018, 01, 01, 00, 00, 00);  //Only reset if Y2K
 		// GetTime(); //Update local time
 		TimeError = true;
 		Serial.println(" PASS, BAD TIME");
@@ -597,7 +597,7 @@ void Margay::GetTime()
 	//Update global time string
 	// DateTime TimeStamp = RTC.now();
 	// LogTimeDate = String(TimeStamp.year()) + "/" + String(TimeStamp.month()) + "/" + String(TimeStamp.day()) + " " + String(TimeStamp.hour()) + ":" + String(TimeStamp.minute()) + ":" + String(TimeStamp.second());  
-	LogTimeDate = RTC.GetTime(0);
+	LogTimeDate = RTC.getTime(0);
 }
 
 float Margay::GetTemp(temp_val Val)
@@ -610,7 +610,7 @@ float Margay::GetTemp(temp_val Val)
 		return TempData;
 	}
 	if(Val == RTC_Val) {
-		float RTCTemp = RTC.GetTemp();  //Get Temp from RTC
+		float RTCTemp = RTC.getTemp();  //Get Temp from RTC
 		return RTCTemp;
 	}
 }
@@ -667,7 +667,7 @@ String Margay::GetOnBoardVals()
 	float BatVoltage = GetBatVoltage(); //Get battery voltage, Include voltage divider in math
 
 	// Temp[3] = Clock.getTemperature(); //Get tempreture from RTC //FIX!
-	float RTCTemp = RTC.GetTemp();  //Get Temp from RTC
+	float RTCTemp = RTC.getTemp();  //Get Temp from RTC
 	GetTime(); //FIX!
 	if(Model< Model_2v0) return LogTimeDate + "," + String(TempData) + "," + String(RTCTemp) + "," + String(BatVoltage) + ",";
 	else return LogTimeDate + "," + String(EnviroSense.GetString()) + String(RTCTemp) + "," + String(BatVoltage) + ",";
@@ -711,7 +711,7 @@ void Margay::Run(String (*Update)(void), unsigned long LogInterval) //Pass in fu
 		// Serial.println("Log Started!"); //DEBUG
 		// LogEvent = true;
 		// unsigned long TempLogInterval = LogInterval; //ANDY, Fix with addition of function??
-		RTC.SetAlarm(LogInterval); //DEBUG!
+		RTC.setAlarm(LogInterval); //DEBUG!
 		InitLogFile(); //Start a new file each time log button is pressed
 
 		//Add inital data point 
@@ -723,11 +723,11 @@ void Margay::Run(String (*Update)(void), unsigned long LogInterval) //Pass in fu
 
 	if(LogEvent) {
 		// Serial.println("Log!"); //DEBUG!
-		// RTC.SetAlarm(LogInterval);  //Set/reset alarm //DEBUG!
+		// RTC.setAlarm(LogInterval);  //Set/reset alarm //DEBUG!
 		AddDataPoint(Update); //Write values to SD
 		LogEvent = false; //Clear log flag
 		// Serial.println("BANG!"); //DEBUG!
-		RTC.SetAlarm(LogInterval);  //Set/reset alarm
+		RTC.setAlarm(LogInterval);  //Set/reset alarm
 		// Serial.println("ResetTimer"); //DEBUG!
 		ResetWD(); //Clear alarm
 	}
@@ -750,7 +750,7 @@ void Margay::Run(String (*Update)(void), unsigned long LogInterval) //Pass in fu
 
 	if(!digitalRead(RTCInt)) {  //Catch alarm if not reset properly 
    		Serial.println("Reset Alarm"); //DEBUG!
-		RTC.SetAlarm(LogInterval); //Turn alarm back on 
+		RTC.setAlarm(LogInterval); //Turn alarm back on 
 	}
 
 	AwakeCount++;
@@ -850,11 +850,11 @@ void Margay::DateTimeSD(uint16_t* date, uint16_t* time)
 	// Serial.println("yy");
 	// Serial.println(timestamp);
 	// return date using FAT_DATE macro to format fields
-	// Serial.println(selfPointer->RTC.GetValue(0)); //DEBUG!
-	*date = FAT_DATE(selfPointer->RTC.GetValue(0) + 2000, selfPointer->RTC.GetValue(1), selfPointer->RTC.GetValue(2));
+	// Serial.println(selfPointer->RTC.getValue(0)); //DEBUG!
+	*date = FAT_DATE(selfPointer->RTC.getValue(0) + 2000, selfPointer->RTC.getValue(1), selfPointer->RTC.getValue(2));
 
 	// return time using FAT_TIME macro to format fields
-	*time = FAT_TIME(selfPointer->RTC.GetValue(3), selfPointer->RTC.GetValue(4), selfPointer->RTC.GetValue(5));
+	*time = FAT_TIME(selfPointer->RTC.getValue(3), selfPointer->RTC.getValue(4), selfPointer->RTC.getValue(5));
 }
 
 void Margay::DateTimeSD_Glob(uint16_t* date, uint16_t* time) {selfPointer->DateTimeSD(date, time);}  //Fix dumb name!
