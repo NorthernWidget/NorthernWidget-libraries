@@ -30,13 +30,13 @@ class DS3231_Logger
 {
 	public:
 		DS3231_Logger();
-		int Begin(void);
-		int SetTime(int Year, int Month, int Day, int Hour, int Min, int Sec);
-		String GetTime(int mode);
-		float GetTemp();
-		int GetValue(int n);
-		int SetAlarm(unsigned int Seconds);
-		int ClearAlarm();
+		int begin(void);
+		int setTime(int Year, int Month, int Day, int Hour, int Min, int Sec);
+		String getTime(int mode);
+		float getTemp();
+		int getValue(int n);
+		int setAlarm(unsigned int Seconds);
+		int clearAlarm();
 
 	private:
 		int ADR = 0x68; //Address of DS3231 (non-variable)

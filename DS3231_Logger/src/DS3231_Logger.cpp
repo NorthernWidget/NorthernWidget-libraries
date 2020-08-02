@@ -22,7 +22,7 @@ DS3231_Logger::DS3231_Logger()
 
 }
 
-int DS3231_Logger::Begin(void)
+int DS3231_Logger::begin(void)
 {
 	Wire.begin();
 
@@ -32,7 +32,7 @@ int DS3231_Logger::Begin(void)
 	return Wire.endTransmission(); //return result of begin, reading is optional
 }
 
-int DS3231_Logger::SetTime(int Year, int Month, int Day, int Hour, int Min, int Sec)
+int DS3231_Logger::setTime(int Year, int Month, int Day, int Hour, int Min, int Sec)
 {
 	if(Year > 999) {
 		Year = Year - 2000; //FIX! Add compnesation for centry 
@@ -60,7 +60,7 @@ int DS3231_Logger::SetTime(int Year, int Month, int Day, int Hour, int Min, int 
   //Read back time to test result of write??
 }
 
-String DS3231_Logger::GetTime(int mode)
+String DS3231_Logger::getTime(int mode)
 {
 	String temp;
 		int TimeDate [7]; //second,minute,hour,null,day,month,year	
@@ -200,7 +200,7 @@ String DS3231_Logger::GetTime(int mode)
 	else return("Invalid Input");
 }
 
-float DS3231_Logger::GetTemp()
+float DS3231_Logger::getTemp()
 {
 	float Temp = 0;
 	Wire.beginTransmission(ADR);
@@ -220,13 +220,13 @@ float DS3231_Logger::GetTemp()
 	return Temp; 
 }
 
-int DS3231_Logger::GetValue(int n)	// n = 0:Year, 1:Month, 2:Day, 3:Hour, 4:Minute, 5:Second
+int DS3231_Logger::getValue(int n)	// n = 0:Year, 1:Month, 2:Day, 3:Hour, 4:Minute, 5:Second
 {
-	GetTime(0); //Update time
+	getTime(0); //Update time
 	return Time_Date[n]; //Return desired value 
 }
 
-int DS3231_Logger::SetAlarm(unsigned int Seconds) { //Set alarm from current time to x seconds from current time 
+int DS3231_Logger::setAlarm(unsigned int Seconds) { //Set alarm from current time to x seconds from current time 
 	//DEFINE LIMITS FOR FUNCTION!!
 
 	if(Seconds == 60) {
@@ -261,7 +261,7 @@ int DS3231_Logger::SetAlarm(unsigned int Seconds) { //Set alarm from current tim
 	//Currently can not set timer for more than 24 hours
 	uint8_t AlarmMask = 0x08; //nibble for A1Mx values
 	uint8_t DY = 0; //DY/DT value 
-	GetTime(0);
+	getTime(0);
 
 	int AlarmTime[7] = {Time_Date[5], Time_Date[4], Time_Date[3], 0, Time_Date[2], Time_Date[1], Time_Date[0]};
 	int AlarmVal[7] = {Seconds % 60, ((Seconds - (Seconds % 60))/60) % 60, ((Seconds - (Seconds % 3600))/3600) % 24, 0, ((Seconds - (Seconds % 86400))/86400), 0, 0};  //Remove unused elements?? FIX!
@@ -323,10 +323,10 @@ int DS3231_Logger::SetAlarm(unsigned int Seconds) { //Set alarm from current tim
 	}
 	}
 
-  ClearAlarm();
+  clearAlarm();
 }
 
-int DS3231_Logger::ClearAlarm() {  //Clear registers to stop alarm, must call SetAlarm again to get it to turn on again
+int DS3231_Logger::clearAlarm() {  //Clear registers to stop alarm, must call setAlarm again to get it to turn on again
 	Wire.beginTransmission(ADR);
 	Wire.write(0x0F); //Write values to status reg
 	Wire.write(0x00); //Clear all flags
