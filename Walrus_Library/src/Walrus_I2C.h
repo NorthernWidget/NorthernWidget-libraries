@@ -20,7 +20,7 @@ Distributed as-is; no warranty is given.
 #define TEMP_OFFSET 0x03 //Define length (offset) of tempurate vals in bytes
 #define PRES_REG 0x03 //Location of pressure register on Walrus
 
-#define ADR_DEFAULT 0x0D //Define default address
+#define ADR_DEFAULT 0x40 //Define default address; conflict w/ other defaults
 
 /**
  * @class Walrus: .
