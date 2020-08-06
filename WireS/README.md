@@ -1,61 +1,138 @@
 # WireS
+Slave only hardware I2C library for ATtiny1634, ATtiny441/841, and ATtiny828.
 
-[![Platform Badge](https://img.shields.io/badge/platform-tinyAVR-orange.svg)](http://www.atmel.com/products/microcontrollers/avr/tinyavr.aspx)
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-[![SemVer](https://img.shields.io/badge/SemVer-1.0.0-brightgreen.svg)](http://semver.org/)
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-[![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+### Introduction
 
-## INTRODUCTION
+Some Atmel microcontrollers have a built-in slave only I2C interface, namely, 
+ATtiny1634, ATtiny441/841, ATtiny20/40, and ATtiny828. 
+The hardware is completely different from the one in popular Arduinos as ATmega328 etc. 
+so another version of Wire Library was needed.
 
-This library enables the newer members of the ATtiny family (ATtiny441/841, ATtiny1634 & ATtiny828) to become Slaves on an I2C Bus. The library is based on a hardware implementation of I2C which is faster than the software one, but requries using a specific set of pins for SDA (PA6 on ATtiny441/841) & SCL (PA4 on ATtiny441/841).
+The new Wire library, WireS is intended to become a drop-in replacement of existing code that is developed by using Arduino IDE.
+For the purpose WireS contains the following compatible slave functions to the Wire Library:
 
-Original Code by: Hisashi Ito ([WireS](https://github.com/orangkucing/WireS))
+* Wire.begin(_address_)
+* Wire.write(_ARG_) (where (_ARG_) can be (_value_), (_string_), or (_data_, _length_))
+* Wire.available()
+* Wire.read()
+* Wire.onReceive(_handler_)
+* Wire.onRequest(_handler_)
 
-## REPOSITORY CONTENTS
+Furthermore the library implements new functionalities 
+such as switching multiple slave addresses, proper handling of repeated starts and so on.
 
-- **WireS.h** - Library Header file.
-- **WireS.cpp** - Library Compilation file.
-- **/examples**  
-    - **/WireS_Example**
-        - **/ATtiny841_Slave**
-            - **ATtiny841_Slave.ino** - Slave-Side: A basic sketch implementing the ATtiny841 as an I2C Slave and Arduino Uno as the I2C Master  
-        - **Arduino_Uno_Master** 
-            - **Arduino_Uno_Master.ino** - Master-Side: A basic sketch implementing the ATtiny841 as an I2C Slave and Arduino Uno as the I2C Master  
-- **/extras** 
-    - **License.txt** - A copy of the end-user license agreement.  
-- **keywords.txt** - Keywords for this library which will be highlighted in sketches within the Arduino IDE. 
-- **library.properties** - General library properties for the Arduino's IDE (>1.5) Library Package Manager.
-- **README.md** - The readme file for this library.
-- **library.json** - JSON file for the Arduino's IDE (>1.5) Package Manager.
+The repo also includes an interesting example of emulating I2C EEPROM (Microchip 24AA00) 
+that makes ATtiny microcontroller's internal EEPROM accessible as an external I2C EEPROM.
 
+### Usage
 
-## GENERAL NOTES
+Install Arduino IDE and Arduino core for ATtiny1634, ATtiny441/841, and ATtiny828 to your PC.
 
-This library follows the convetions of the Arduino's built-in [Wire](https://github.com/arduino/Arduino/tree/master/hardware/arduino/avr/libraries/Wire) library, with only 'TinyWireS' replacing the 'Wire' keyword. Hence, for example, use TinyWireS.begin(SLAVE_ADDR) to join the I2C Bus as Slave, or TinyWireS.write(dataByte) to send a data byte to the Master.
+* [Arduino IDE download](http://www.arduino.cc/en/Main/Software)
+* [Arduino core for ATtiny](https://github.com/SpenceKonde/ATTinyCore) 1634, x313, x4, x41, x5, x61, x7, x8 and 828 for Arduino 1.6.x 
 
+(Currently there's no Arduino core for ATtiny20/40.)
 
-## BUG REPORTS
+Then download the zip file of WireS, unpack it to your library directory,
+and you are ready to use WireS by including the header file as
+```
+#include <WireS.h>
+```
 
-Please report any issues/bugs/suggestions at the [Issues](https://github.com/nadavmatalon/WireS/issues) section of this Github repository.
+### Reference
 
+- - - 
+##### Wire.begin(_address_)
+##### Wire.begin(_address_, _mask_)
+Initiate the WireS library and join the I2C bus as a slave. 
 
-## TODO
+The 7-bit slave address is specified as _address_.
+If LSB of _mask_ is set then (_mask_ >> 1) is the second 7-bit slave address,
+otherwise the bits specified in (_mask_ >> 1) are masked (ignored) in _address_. 
 
+For example
+```
+Wire.begin(0x50, (0x60 << 1 | 1));
+```
+listens two slave addresses 0x50 and 0x60, and
+```
+Wire.begin(0x50, B1110);
+```
+accepts transactions targeted to slave addresses from 0x50 to 0x57.
 
-## VERSION HISTORY
+Note: 10-bit slave address is supported but the lower 7-bit part of address needs to be handled (ACKed/NACKed) by software in the onAddrReceive handler.
 
-__Ver. 1.0.0__ - First release (4.12.16)  
+- - -
+##### Wire.write(_value_)
+##### Wire.write(_string_)
+##### Wire.write(_data_, _length_)
+Writes data in response to a request from a master.
 
+A value to send as a single byte is _value_,
+a string to send as a series of bytes is _string_, and
+an array of data to send as bytes is _data_ whose size is in _length_.
 
-## LICENSE
+Wire.write() returns a value that is equal to the number of bytes written to the internal buffer
+and the value is not equal to the number of bytes actually transmitted through the I2C bus.
+In order to know the actual numbers of sent bytes use Wire.getTransmitBytes() in the handler of Wire.onStop() (or in the handler of Wire.onAddrReceive()) instead.
 
-[The MIT License (MIT)](https://opensource.org/licenses/MIT)
-Copyright (c) 2016 Nadav Matalon
+- - -
+##### Wire.available()
+Returns the number of bytes available for retrieval with Wire.read().
 
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+This should be called on inside the onReceive() handler or under repeated start condition onAddrReceive() handler.
 
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+- - -
+##### Wire.read()
+Reads a byte that was transmitted from a master.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+This should be called on inside the onReceive() handler or under repeated start condition onAddrReceive() handler.
 
+- - -
+##### Wire.getTransmitBytes()
+Returns the number of bytes actually sent with Wire.write().
+
+This should be called on inside the onStop() handler or under repeated start condition onAddrReceive() handler.
+
+- - -
+##### Wire.onAddrReceive(_handler_)
+Registers a function to be called when the device receives a sequence of start / 7-bit or 10-bit address / direction bit from a master.
+
+_handler_: the function to be called when the slave receives its address; this should take two integer parameters _address_ and _startCount_
+(_address_[7:1] or _address_[10:1] by which the device is called, _address_[0] direction, and _startCount_ the number of start so far in the current transmission), and 
+returns `true`: the device send ACK to the master for going on;
+`false`: the device send NACK to the master and stop the current session.
+
+e.g.: ```boolean myHandler(uint16_t address, uint8_t startCount)```
+
+- - -
+##### Wire.onReceive(_handler_)
+Registers a function to be called when the device receives a sequence of data from a master.
+
+_handler_: the function to be called when the slave receives data; this should take an integer parameter _numBytes_
+(_numBytes_ the number of bytes read from the master) and return nothing,
+
+e.g.: ```void myHandler(int numBytes)```
+
+- - -
+##### Wire.onRequest(_handler_)
+Registers a function to be called when a master requests data from the device. 
+
+_handler_: the function to be called, no parameters and returns nothing.
+
+e.g.: ```void myHandler()```
+
+- - -
+##### Wire.onStop(_handler_)
+Registers a function to be called when stop condition is detected after the transmission. 
+
+_handler_:  the function to be called, no parameters and returns nothing.
+
+e.g.: ```void myHandler()```
+
+### Handler Invocation
+
+The user defined handlers are called from the hardware interrupt routine.
+The following diagram, originally from Atmel's datasheet, shows the exact timing when these handlers will be called.
+
+![Handler Invocation Points](http://mewpro.cc/wp-content/uploads/I2C-slave.jpg)
