@@ -65,7 +65,7 @@ uint8_t Haar::sleep(bool state)
 uint8_t Haar::updateMeasurements(bool block)
 {
 	dataRequested = true; // Set flag
-	Wire.beginTransmission(0x40);
+	Wire.beginTransmission(ADR);
 	Wire.write(0x00);
 	Wire.write(0x01); // Trigger conversion
 	uint8_t error = Wire.endTransmission(); // Return I2C status
@@ -106,10 +106,10 @@ String Haar::getString()
 bool Haar::newData()  // Checks for updated data
 {
 	unsigned long timeout = millis(); // Get timeout value
-	Wire.beginTransmission(0x40);
+	Wire.beginTransmission(ADR);
 	Wire.write(0x00);
 	Wire.endTransmission();
-	Wire.requestFrom(0x40, 1);
+	Wire.requestFrom(ADR, 1);
 	// Wait for value to be returned //FIX! add timeout/remove
 	while(Wire.available() < 1 && (millis() - timeout < timeoutGlobal)) {
 		delay(1);

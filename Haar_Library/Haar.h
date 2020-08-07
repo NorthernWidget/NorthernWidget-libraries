@@ -42,10 +42,9 @@ class Haar
 
 	  /**
 	   * @brief Begin communications with the Haar sensor.
-	   * @param[in] ADR_: I2C address. Defaults to 0x40.
-	   * DOES NOT ACTUALLY SEEM TO BE USED! 0x40 FOR EVERYTHING, REGARDLESS
+	   * @param[in] ADR_: I2C address. Defaults to 0x42.
 	   */
-		uint8_t begin(uint8_t ADR_ = 0x40);
+		uint8_t begin(uint8_t ADR_ = 0x42);
 
 	  /**
 	   * @brief Return the currently stored pressure [in mBar]
@@ -111,7 +110,7 @@ class Haar
 		String getHeader();
 
 	private:
-		uint8_t ADR = 0x40; //Default global sensor address
+		uint8_t ADR = 0x42; //Default global sensor address
 		int16_t getWord(uint8_t Reg);
 		unsigned long timeoutGlobal = 500; //Timeout value, ms //FIX??
 		bool dataRequested = false; //Flag for keeping track of data requests and

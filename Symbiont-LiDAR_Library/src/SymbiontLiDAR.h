@@ -21,7 +21,7 @@ License: GNU GPL v3. You should find a copy in the repository.
 #include <Arduino.h>
 #include <Wire.h>
 
-#define ADR_DEFAULT 0x40 // Define default address. But this clashes with Haar.
+#define ADR_DEFAULT 0x50 // Define default address.
 
 // Sensitivity
 #define sensitivityBalanced 0
@@ -32,10 +32,10 @@ License: GNU GPL v3. You should find a copy in the repository.
  * @class SymbiontLiDAR Class to Interface with the SymbiontLiDAR module.
  * @brief Arduino library for the Symbiont board, which manages a LiDAR Lite
  * unit (roll/pitch, firmware lock/reset, power supply).
- * @details Library to communicate with the SymbiontLiDAR module, which 
+ * @details Library to communicate with the SymbiontLiDAR module, which
  * connects to a LiDAR Lite rangefinder.The Symbiont is equipped with
- * capacitors to handle the large burst power draw from the LiDAR Lite, a MEMS 
- * accelerometer to note its orientation, a magnet to note a known orientation 
+ * capacitors to handle the large burst power draw from the LiDAR Lite, a MEMS
+ * accelerometer to note its orientation, a magnet to note a known orientation
  * (often, but not necessarily, horizontal)  and the ability to absorb
  * occasional firmware issues that lead to system hangs.
  * The leveling helps the user to calculate, for example, a water level
@@ -51,13 +51,13 @@ class SymbiontLiDAR
     public:
         /**
          * @brief Instantiate SymbiontLiDAR object
-         */    
+         */
         SymbiontLiDAR();
 
         /**
          * @brief Begin communications with the Symbiont using a prescribed
          * address.
-         * @param Addresss_ default 0x40
+         * @param Addresss_ default 0x50
          * DOES NOT YET USE A VARIABLE ADDRESS!
          * DOES NOT MATTER WHAT YOU WRITE HERE.
          * THIS DEFAULT ADDRESS CURRENTLY CLASHES WITH HAAR'S DEFAULT!
@@ -69,38 +69,38 @@ class SymbiontLiDAR
          * Default value: sensitivityBalanced (0)
          * THIS IS ALSO NOT YET IMPLEMENTED IN FIRMWARE! JUST STAYS AT DEFAULT
          * (SENSITIVITY_BALANCED = 0)
-         * CONSIDER A SET_SENSITIVITY FUNCTION IN THE FUTURE TO ALLOW THE 
+         * CONSIDER A SET_SENSITIVITY FUNCTION IN THE FUTURE TO ALLOW THE
          * SENSOR TO AUTOMATICALLY ADJUST THE SENSITIVITY TO RECEIVE THE BEST
          * POSSIBLE RETURN
-         */    
+         */
         void begin(uint8_t Address_ = ADR_DEFAULT, \
                    uint8_t sensitivity = sensitivityBalanced);
 
         /**
          * @brief Measure range [cm], roll [deg] and pitch [deg].
          * Returns "0" if sensors read error values; else returns "1".
-         */    
+         */
         bool updateMeasurements();
 
         /**
          * @brief Return range [cm]
-         */    
+         */
         float getRange();
 
         /**
          * @brief Return roll [deg]
-         */    
+         */
         float getRoll();
 
         /**
          * @brief Return pitch [deg]
-         */    
+         */
         float getPitch();
 
         /**
-         * @brief Return a comma-separated header: 
+         * @brief Return a comma-separated header:
          * "Range [cm],Pitch [deg],Roll [deg],"
-         */    
+         */
         String getHeader();
 
         /**
@@ -109,7 +109,7 @@ class SymbiontLiDAR
          * an end user to use.
          * Values are returned as:
          * String(Range) + "," + String(Pitch) + "," + String(Roll) + ","
-         * Error values are "-9999" (sensor error) and "-9998" (no measurement 
+         * Error values are "-9999" (sensor error) and "-9998" (no measurement
          * yet taken")
          * @param[in] takeNewReadings: if `true` run `updateMeasurements` before
          * returning values. Otherwise, just return values.
@@ -118,20 +118,20 @@ class SymbiontLiDAR
 
         /**
          * @brief CapitalCase version of getHeader() for backwards compatibility
-         */    
+         */
         String GetHeader();
 
         /**
          * @brief CapitalCase version of getString() for backwards compatibility
          * @param[in] takeNewReadings: if `true` run `updateMeasurements` before
          * returning values. Otherwise, just return values.
-         */    
+         */
         String GetString(bool takeNewReadings = false);
 
     private:
         //Default address
         uint8_t ADR = ADR_DEFAULT;
-        
+
         // Variables to save and make accessible to other functions
         // Initialize at a non-error value; just one that indicates that
         // they are unset (will be returned if requested before measurement
@@ -139,10 +139,9 @@ class SymbiontLiDAR
         float Range = -9998;
         float Pitch = -9998;
         float Roll = -9998;
-        
+
         // Sensor sensitivity; set initially to default "balanced" mode
         uint8_t sensitivity = sensitivityBalanced;
 };
 
 #endif
-
