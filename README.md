@@ -41,6 +41,10 @@ To view the libraries on Mac, you have to open the contents of your **ArduinoNNN
 
 ### Download and extract contents
 
+#### Option A: ZIP
+
+***Better for users unfamiliar with git***
+
 1. Click on the green "Clone or download" button on this page.
 2. Click "Download ZIP"
 3. Open the ZIP file. It should contain one folder titled "NorthernWidget-libraries-master"
@@ -49,7 +53,22 @@ To view the libraries on Mac, you have to open the contents of your **ArduinoNNN
 
 At this point, you should have all the libraries required to compile any Northern Widget code.
 
-If you are running the Arduino IDE, you will need to restart it in order to for the changes to take effect.
+If you are running the Arduino IDE, you may need to restart it in order to for the changes to take effect.
+
+Repeat these steps if you would like to obtain updated library versions.
+
+#### Option B: git
+
+***Easier for updating to the latest library versions***
+
+1. Click on the green "Clone or download" button on this page.
+2. Obtain the link and clone it to your Arduino "libraries" folder (e.g., using `git clone` from the command line)
+
+At this point, you should have all the libraries required to compile any Northern Widget code.
+
+If you are running the Arduino IDE, you may need to restart it in order to for the changes to take effect.
+
+If you would like to obtain updated library versions, simply run `git pull` in the Arduino libraries folder.
 
 ### Reporting and fixing issues
 
