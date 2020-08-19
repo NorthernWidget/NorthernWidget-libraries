@@ -91,8 +91,17 @@ class Walrus
          */
         String getString();
 
+        /**
+        * @brief Checks for updated data. Returns `true` if new data are available;
+        * otherwise returns `false`
+        * @param Block: if `true`, wait for data to be returned. Defaults to
+        * `false`.
+        */
+        bool newData();
+
     private:
         uint8_t ADR = ADR_DEFAULT; //Default address
+        unsigned long timeoutGlobal = 1000; //Timeout value, ms //FIX??
 };
 
 #endif

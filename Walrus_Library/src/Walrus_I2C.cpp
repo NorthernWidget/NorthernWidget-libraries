@@ -131,6 +131,29 @@ float Walrus::getPressure()
     else return -9999.0; //Else return error condition 
 }
 
+bool Walrus::newData()  // Checks for updated/valid data
+{
+    unsigned long timeout = millis(); // Get timeout value
+    Wire.beginTransmission(ADR);
+    Wire.write(0x00);
+    Wire.endTransmission();
+    Wire.requestFrom(ADR, 1);
+    // Wait for value to be returned //FIX! add timeout/remove
+    while(Wire.available() < 1 && (millis() - timeout < timeoutGlobal)) {
+        delay(1);
+    }
+    uint8_t val = Wire.read();  //DEBUG!
+
+    bool state = false;
+    // bool state = ~(val & 0x01);
+    if((val & 0x80) == 0x80) state = true;  //FIX! Make cleaner
+    else state = false;
+    // Serial.println(state); //DEBUG!
+    // Return inverse of bit 0, true when bit has been cleared,
+    // false when waiting for new conversion
+    return (state);
+}
+
 String Walrus::getHeader()
 {
     return "Pressure [mBar],Temp DH [C],Temp DHt [C],"; //return header string
@@ -138,7 +161,15 @@ String Walrus::getHeader()
 
 String Walrus::getString()
 {
+    unsigned long timeout = millis(); //Get timeout value
+    while(!newData() && (millis() - timeout < timeoutGlobal)) {
+            delay(1);
+        }
+    if(newData()) {
+            return String(getPressure()) + "," + String(getTemperature(0)) + "," \
+                                   + String(getTemperature(1)) + ",";
+    }
+    else return "-9999.0,-9999.0,-9999.0,"; //Return failure state //FIX hardcode??
     //Return data string
-    return String(getPressure()) + "," + String(getTemperature(0)) + "," \
-                                       + String(getTemperature(1)) + ",";
+
 }
