@@ -114,7 +114,7 @@ class SymbiontLiDAR
          * @param[in] takeNewReadings: if `true` run `updateMeasurements` before
          * returning values. Otherwise, just return values.
          */
-        String getString(bool takeNewReadings = false);
+        String getString(bool takeNewReadings = true);
 
         /**
          * @brief CapitalCase version of getHeader() for backwards compatibility
@@ -126,7 +126,7 @@ class SymbiontLiDAR
          * @param[in] takeNewReadings: if `true` run `updateMeasurements` before
          * returning values. Otherwise, just return values.
          */
-        String GetString(bool takeNewReadings = false);
+        String GetString(bool takeNewReadings = true);
 
     private:
         //Default address

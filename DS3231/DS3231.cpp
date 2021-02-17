@@ -127,7 +127,7 @@ DateTime::DateTime (uint16_t year, uint8_t month, uint8_t day, uint8_t hour, uin
 // supported formats are date "Mmm dd yyyy" and time "hh:mm:ss" (same as __DATE__ and __TIME__)
 DateTime::DateTime(const char* date, const char* time) {
    static const char month_names[] = "JanFebMarAprMayJunJulAugSepOctNovDec";
-   static const char buff[4];
+   static const char buff[4]={'0','0','0','0'};
    int y;
    sscanf(date, "%s %d %d", buff, &d, &y);
    yOff = y >= 2000 ? y - 2000 : y;
@@ -407,10 +407,11 @@ float DS3231::getTemperature() {
     tMSB = Wire.read(); //2's complement int portion
     tLSB = Wire.read(); //fraction portion
 
-    temp3231 = ((((short)tMSB << 8) | (short)tLSB) >> 6) / 4.0;
+    int16_t  itemp  = ( tMSB << 8 | (tLSB & 0xC0) );  // Shift upper byte, add lower
+    temp3231 = ( (float)itemp / 256.0 );              // Scale and return
   }
   else {
-    temp3231 = -9999; // Some obvious error value
+    temp3231 = -9999; // Impossible temperature; error value
   }
    
   return temp3231;

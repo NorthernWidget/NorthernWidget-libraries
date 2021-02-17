@@ -54,7 +54,7 @@ bool SymbiontLiDAR::updateMeasurements(){
     // Perhaps use pointers, or just comments?
   
     // Measured laser range in centimeters
-    float Range = DataSet[0];
+    Range = DataSet[0];
 
     //Convert g vals to floats for math
     float gX = DataSet[1];
@@ -64,9 +64,6 @@ bool SymbiontLiDAR::updateMeasurements(){
     float OffsetX = DataSet[4];
     float OffsetY = DataSet[5];
     float OffsetZ = DataSet[6];
-
-    float Pitch = 0;
-    float Roll = 0;
 
     // Calculate roll/pitch and parse errors
     // Error return value = -9999.

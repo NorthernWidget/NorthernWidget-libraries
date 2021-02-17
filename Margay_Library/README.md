@@ -31,12 +31,12 @@ If an error code is received try the following steps:
 - **General**
 	- Disconnect and reconnect power, both USB and battery ([Turn it off and back on again](https://i.imgur.com/Yj6dB3W.gif))
 	- Verify the quality of all screw terminal connections by gently tugging on the wires and making sure they stay in place, if not, remove and re-tighten the connection 
-	- Ensure sensors and/or cables are not damaged, this can result is shorts or other problems
-	- Make sure batteries have sufficient voltage to run the logger, when the battery voltage drops below *3.3v*, unexpected results can occur 
+	- Ensure sensors and/or cables are not damaged, this can result in shorts or other problems
+	- Make sure batteries have sufficient voltage to run the logger, when the battery voltage drops below *3.3v*, malfunctions can occur 
 - **Orange**
 	- Verify correct polarity of sensor connection
 	- Ensure the right sensor is connected
-	- Verify the screw terminals are well connected to the wires (a lose connection can cause a failure)
+	- Verify the screw terminals are well connected to the wires (a loose connection can cause a failure)
 	- Make sure battery power is applied, some sensors can fail otherwise
 - **Cyan**
 	- Connect the logger to a computer and reset the clock using the [Northern Widget Time Set GUI](https://github.com/NorthernWidget/SetTime_GUI)

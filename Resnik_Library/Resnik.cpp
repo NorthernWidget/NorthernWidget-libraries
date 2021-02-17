@@ -724,17 +724,29 @@ void Resnik::Run(String (*Update)(void), unsigned long LogInterval) //Pass in fu
 			// 	Serial.println("START BACKHAUL"); //DEBUG!
 			// 	delay(100);
 			// }
+			//delay(20);
+			//Serial.end();
+			//delay(20);
+			//Serial.begin(38400); // Use different rate too?
+			//delay(20);
+			// Delay to make transmission work
+			unsigned long Timeout = millis();
+			while((millis() - Timeout) < 1000); // Give transmission some time. (This must be substantial!)
 			Serial.println("START BACKHAUL"); //DEBUG!
+			//Serial.println("MID BACKHAUL"); //DEBUG!
+			///*
 			for(int i = 0; i < LogCountPush; i++) { //Print out SD values 
 				Serial.println(ReadStr(i, LastSDIndex));
 			}
+			//*/
 			LastSDIndex = SDIndex; //copy new value over
 			LogCount = 0; 
 			Serial.println("END BACKHAUL"); //DEBUG!
+			Timeout = millis();
+			while(digitalRead(FeatherGPIO) && (millis() - Timeout) < 180000); //Wait for completerion or for timeout (180 seconds -- takes 2G/3G longer)
+			// while((millis() - Timeout) < 59000); //DEBUG!
+			// Give as much time as possible to complete the communications. Takes a while and can time out easily.
 			pinMode(FeatherGPIO, INPUT);
-			unsigned long Timeout = millis();
-			// while(digitalRead(FeatherGPIO) && (millis() - Timeout) < 60000); //Wait for completerion or for timeout (60 seconds)
-			while((millis() - Timeout) < 60000); //DEBUG!
 		}
 		LogEvent = false; //Clear log flag
 		// Serial.println("BANG!"); //DEBUG!
