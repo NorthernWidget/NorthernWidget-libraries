@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2011-2020 Bill Greiman
+ * Copyright (c) 2011-2018 Bill Greiman
  * This file is part of the SdFat library for SD memory cards.
  *
  * MIT License
@@ -22,9 +22,8 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  */
+#if defined(__STM32F1__) || defined(__STM32F4__)
 #include "SdSpiDriver.h"
-#if defined(SD_USE_CUSTOM_SPI)\
-  && (defined(__STM32F1__) || defined(__STM32F4__))
 #if defined(__STM32F1__)
 #define USE_STM32_DMA 1
 #elif defined(__STM32F4__)
@@ -33,45 +32,74 @@
 #error Unknown STM32 type
 #endif  // defined(__STM32F1__)
 //------------------------------------------------------------------------------
-void SdSpiArduinoDriver::activate() {
+/** Set SPI options for access to SD/SDHC cards.
+ *
+ * \param[in] divisor SCK clock divider relative to the APB1 or APB2 clock.
+ */
+void SdSpiAltDriver::activate() {
   m_spi->beginTransaction(m_spiSettings);
 }
 //------------------------------------------------------------------------------
-void SdSpiArduinoDriver::begin(SdSpiConfig spiConfig) {
-  if (spiConfig.spiPort) {
-    m_spi = spiConfig.spiPort;
-  } else {
-    m_spi = &SPI;
-  }
+/** Initialize the SPI bus.
+ *
+ * \param[in] chipSelectPin SD card chip select pin.
+ */
+void SdSpiAltDriver::begin(uint8_t csPin) {
+  m_csPin = csPin;
+  pinMode(m_csPin, OUTPUT);
+  digitalWrite(m_csPin, HIGH);
   m_spi->begin();
 }
 //------------------------------------------------------------------------------
-void SdSpiArduinoDriver::deactivate() {
+/**
+ * End SPI transaction.
+ */
+void SdSpiAltDriver::deactivate() {
   m_spi->endTransaction();
 }
 //------------------------------------------------------------------------------
-uint8_t SdSpiArduinoDriver::receive() {
+/** Receive a byte.
+ *
+ * \return The byte.
+ */
+uint8_t SdSpiAltDriver::receive() {
   return m_spi->transfer(0XFF);
 }
 //------------------------------------------------------------------------------
-uint8_t SdSpiArduinoDriver::receive(uint8_t* buf, size_t count) {
+/** Receive multiple bytes.
+ *
+ * \param[out] buf Buffer to receive the data.
+ * \param[in] n Number of bytes to receive.
+ *
+ * \return Zero for no error or nonzero error code.
+ */
+uint8_t SdSpiAltDriver::receive(uint8_t* buf, size_t n) {
 #if USE_STM32_DMA
-  return m_spi->dmaTransfer(nullptr, buf, count);
+  return m_spi->dmaTransfer(nullptr, buf, n);
 #else  // USE_STM32_DMA
-  m_spi->read(buf, count);
+  m_spi->read(buf, n);
   return 0;
 #endif  // USE_STM32_DMA
 }
 //------------------------------------------------------------------------------
-void SdSpiArduinoDriver::send(uint8_t data) {
-  m_spi->transfer(data);
+/** Send a byte.
+ *
+ * \param[in] b Byte to send
+ */
+void SdSpiAltDriver::send(uint8_t b) {
+  m_spi->transfer(b);
 }
 //------------------------------------------------------------------------------
-void SdSpiArduinoDriver::send(const uint8_t* buf , size_t count) {
+/** Send multiple bytes.
+ *
+ * \param[in] buf Buffer for data to be sent.
+ * \param[in] n Number of bytes to send.
+ */
+void SdSpiAltDriver::send(const uint8_t* buf , size_t n) {
 #if USE_STM32_DMA
-  m_spi->dmaTransfer(const_cast<uint8*>(buf), nullptr, count);
+  m_spi->dmaTransfer(const_cast<uint8*>(buf), nullptr, n);
 #else  // USE_STM32_DMA
-  m_spi->write(const_cast<uint8*>(buf), count);
+  m_spi->write(const_cast<uint8*>(buf), n);
 #endif  // USE_STM32_DMA
 }
-#endif  // defined(SD_USE_CUSTOM_SPI) &&  defined(__STM32F1__)
+#endif  // defined(__STM32F1__) || defined(__STM32F4__)

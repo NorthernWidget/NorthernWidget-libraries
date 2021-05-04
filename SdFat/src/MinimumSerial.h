@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2011-2020 Bill Greiman
+ * Copyright (c) 2011-2018 Bill Greiman
  * This file is part of the SdFat library for SD memory cards.
  *
  * MIT License
@@ -28,16 +28,16 @@
  */
 #ifndef MinimumSerial_h
 #define MinimumSerial_h
-#include "common/SysCall.h"
+#include "SysCall.h"
 //==============================================================================
 /**
  * \class MinimumSerial
  * \brief mini serial class for the %SdFat library.
  */
-class MinimumSerial : public print_t {
+class MinimumSerial : public Print {
  public:
   /** \return true for hardware serial */
-  operator bool() {return true;}
+  operator bool() { return true; }
   /**
    * \return one if data is available.
    */
@@ -62,6 +62,6 @@ class MinimumSerial : public print_t {
    * \return 1
    */
   size_t write(uint8_t b);
-  using print_t::write;
+  using Print::write;
 };
 #endif  // MinimumSerial_h
