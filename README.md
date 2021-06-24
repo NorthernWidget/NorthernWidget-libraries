@@ -6,21 +6,21 @@ These libraries are all copies from their original sources. Most are from Northe
 
 ## Installation instructions
 
-This package bundles together many libraries for ease of download. However, this means that you cannot use the [Arduino Library Manager](https://www.arduino.cc/en/guide/libraries#toc3) built into the [Arduino IDE](https://www.arduino.cc/en/main/software). Therefore, we have to use the older approach of copying the folders containing the library information to the folder containing your Arduino libraries.
+This package bundles together many libraries for easy downloading. However, this means that you cannot use the [Arduino Library Manager](https://www.arduino.cc/en/guide/libraries#toc3) built into the [Arduino IDE](https://www.arduino.cc/en/main/software). Therefore, we have to use the older approach of copying the folders containing the library information to the folder containing your Arduino libraries.
 
 ### Arduino libraries folder location
 
-Your Arduino libraries are held in a folder called **libraries**. Who would have guessed? Here is where to find it:
+Your Arduino libraries are held in a folder called, conveniently, **libraries**. Here is where to find it:
 
-#### Linux
+### Linux
 
 **Installation via direct download**
 
-*Highly recommended: download most recent version for your OS (most likely "Linux 64 bits") from https://www.arduino.cc/en/main/software*
+*Highly recommended: download most recent version for your OS (most likely "Linux 64 bit") from https://www.arduino.cc/en/main/software*
 
 *Libraries location:* `$HOME/Arduino/libraries`
 
-**Installation from apt**
+**Installation via apt**
 You can use:
 ```
 apt install arduino
@@ -29,11 +29,11 @@ This can help to ensure that you have important core libraries, but this version
 
 *Libraries location:* `$HOME/.arduino/libraries`
 
-#### Windows
+### Windows
 
 *Libraries location:* `'My Documents\Arduino\libraries'`
 
-#### Mac
+### Mac
 
 To view the libraries on Mac, you have to open the contents of your **ArduinoNNN.app** package, where NNN stands for the version number. (CTRL+click --> show package contents.)
 
@@ -48,8 +48,9 @@ To view the libraries on Mac, you have to open the contents of your **ArduinoNNN
 1. Click on the green "Clone or download" button on this page.
 2. Click "Download ZIP"
 3. Open the ZIP file. It should contain one folder titled "NorthernWidget-libraries-master"
-4. Enter "NorthernWidget-libraries-master" to view all of its subfolders. Each is a library.
-5. Extract the contents of your archive to the folder listed above. If this is not directly possible (perhaps for Mac), extract the contents to a temporary folder and then cut/paste them to the "libraries" folder.
+4. Open "NorthernWidget-libraries-master" to view all of its subfolders. Each is a library.
+5. Extract the subfolders within the "NorthernWidget-libraries-master" folder you would like to use to your Arduino "libraries" folder. You could also just extract all of them!
+  * If this is not directly possible (perhaps for Mac), extract the contents to a temporary folder and then cut/paste them to your Arduino "libraries" folder.
 
 At this point, you should have all the libraries required to compile any Northern Widget code.
 
