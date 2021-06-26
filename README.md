@@ -6,6 +6,8 @@ These libraries are all copies from their original sources. Most are from Northe
 
 ## Installation instructions
 
+**Note: the Arduino IDE needs to be installed on your machine before installing these libraries. If you do not yet have Arduino installed, you can download it [here](https://www.arduino.cc/en/main/software).**
+
 This package bundles together many libraries for easy downloading. However, this means that you cannot use the [Arduino Library Manager](https://www.arduino.cc/en/guide/libraries#toc3) built into the [Arduino IDE](https://www.arduino.cc/en/main/software). Therefore, we have to use the older approach of copying the folders containing the library information to the folder containing your Arduino libraries.
 
 ### Arduino libraries folder location
@@ -25,7 +27,7 @@ You can use:
 ```
 apt install arduino
 ```
-This can help to ensure that you have important core libraries, but this version of Arduino is often significantly out of date.
+This can help to ensure that you have important core libraries, but this version of Arduino is often significantly out of date. Be sure to double-check the Arduino version for potential compatability issues if installed this way. If problems occur, defer back to installation via direct download.
 
 *Libraries location:* `$HOME/.arduino/libraries`
 
