@@ -10,6 +10,8 @@ Class to interface with the [Walrus](#classWalrus) submersible temperature and p
 
 The [Walrus](#classWalrus) is an encapsulated submersible pressure and temperature sensor intended for water-level or barometric monitoring.
 
+[![DOI](https://zenodo.org/badge/219609527.svg)](https://zenodo.org/badge/latestdoi/219609527)
+
 ## Summary
 
  Members                        | Descriptions                                
@@ -19,8 +21,8 @@ The [Walrus](#classWalrus) is an encapsulated submersible pressure and temperatu
 `public float `[`getTemperature`](#classWalrus_1a85ce9dfa9cfb381a7d9a15eb0ce928d3)`(uint8_t Location)` | Return calculated temperature from [Walrus](#classWalrus).
 `public float `[`getTemperature`](#classWalrus_1a18b8301db55eae06af23ee572d9b5c96)`()` | Return calculated temperature from sensor, using a predefined offset. WHAT DOES THIS OFFSET DO?
 `public float `[`getPressure`](#classWalrus_1a133a8b6e4e425c4b3bb6c7863607cae9)`()` | Return calculated pressure from sensor.
-`public String `[`GetHeader`](#classWalrus_1a17341827680ca67f02885219f00d9326)`()` | Return header.
-`public String `[`GetString`](#classWalrus_1a5442e6ca8a93db0e65fe9a72df5d7b23)`()` | Return measurement data as a string.
+`public String `[`getHeader`](#classWalrus_1ad5e6a48eb0dccf464e2bb247e7428996)`()` | Return header.
+`public String `[`getString`](#classWalrus_1a98e4901b91f78da550c1512e23fb5bbf)`()` | Return measurement data as a string.
 
 ## Members
 
@@ -54,13 +56,13 @@ Return calculated pressure from sensor.
 
 This is the MS5803 sensor, which can come in a variety of different pressure ranges and sensitivities.
 
-#### `public String `[`GetHeader`](#classWalrus_1a17341827680ca67f02885219f00d9326)`()` 
+#### `public String `[`getHeader`](#classWalrus_1ad5e6a48eb0dccf464e2bb247e7428996)`()` 
 
 Return header.
 
 "Pressure [mBar],Temp DH [C],Temp DHt [C],"
 
-#### `public String `[`GetString`](#classWalrus_1a5442e6ca8a93db0e65fe9a72df5d7b23)`()` 
+#### `public String `[`getString`](#classWalrus_1a98e4901b91f78da550c1512e23fb5bbf)`()` 
 
 Return measurement data as a string.
 

@@ -45,6 +45,8 @@ License: GNU GPL v3. You should find a copy in the repository.
  * value, thereby correcting for this. Managing failures of the LiDAR Lite
  * within the Symbiont is essential, and the Symbiont therefore acts as a
  * buffer to protect the data logger from raw sensor failures.
+ *
+ * \verbatim [![DOI](https://zenodo.org/badge/260392682.svg)](https://zenodo.org/badge/latestdoi/260392682) \endverbatim
  */
 class SymbiontLiDAR
 {

@@ -120,6 +120,7 @@ class Margay
 	protected:
 		float TempConvert(float V, float Vcc, float R, float A, float B, float C, float D, float R25);
 		void Blink();
+		void BlinkGood();
 		// void StartLog();
 		// void Log();
 		void virtual Log();

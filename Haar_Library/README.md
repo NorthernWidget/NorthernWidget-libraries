@@ -12,12 +12,14 @@ Project [Haar](#classHaar), named for the cold fog off the north sea, is a press
 
 *May their silicon and copper souls join the chorus of the stars.*
 
+[![DOI](https://zenodo.org/badge/200929328.svg)](https://zenodo.org/badge/latestdoi/200929328)
+
 ## Summary
 
  Members                        | Descriptions                                
 --------------------------------|---------------------------------------------
 `public  `[`Haar`](#classHaar_1a0da6a368ea9f434647065dbc356350cf)`()` | Instantiate the [Haar](#classHaar) sensor class.
-`public uint8_t `[`begin`](#classHaar_1a80119761d396fae3f7f36dc5ef0f5d63)`(uint8_t ADR_)` | Begin communications with the [Haar](#classHaar) sensor.
+`public uint8_t `[`begin`](#classHaar_1af3aefa867b9875a68de65f45666c94c1)`(uint8_t ADR_)` | Begin communications with the [Haar](#classHaar) sensor.
 `public float `[`getPressure`](#classHaar_1ade237d2fa6aa6be08de2d631f8c3c4ab)`(bool update)` | Return the currently stored pressure [in mBar].
 `public float `[`getHumidity`](#classHaar_1afacacfa4b648e9aed0c8b42f3f078246)`(bool update)` | Return the currently stored relative humidity [%].
 `public float `[`getTemperature`](#classHaar_1ac0c2a08ab816a6fa66bc1a4e41598956)`(Sensor Device,bool update)` | Return the currently stored Temperature [degrees C].
@@ -33,12 +35,12 @@ Project [Haar](#classHaar), named for the cold fog off the north sea, is a press
 
 Instantiate the [Haar](#classHaar) sensor class.
 
-#### `public uint8_t `[`begin`](#classHaar_1a80119761d396fae3f7f36dc5ef0f5d63)`(uint8_t ADR_)` 
+#### `public uint8_t `[`begin`](#classHaar_1af3aefa867b9875a68de65f45666c94c1)`(uint8_t ADR_)` 
 
 Begin communications with the [Haar](#classHaar) sensor.
 
 #### Parameters
-* `ADR_` I2C address. Defaults to 0x40. DOES NOT ACTUALLY SEEM TO BE USED! 0x40 FOR EVERYTHING, REGARDLESS
+* `ADR_` I2C address. Defaults to 0x42.
 
 #### `public float `[`getPressure`](#classHaar_1ade237d2fa6aa6be08de2d631f8c3c4ab)`(bool update)` 
 

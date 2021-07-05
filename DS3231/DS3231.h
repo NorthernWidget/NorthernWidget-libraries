@@ -19,7 +19,7 @@
 // Changed the following to work on 1.0
 //#include "WProgram.h"
 #include <Arduino.h>
-
+#include <time.h>
 #include <Wire.h>
 
 // DateTime (get everything at once) from JeeLabs / Adafruit
@@ -55,7 +55,7 @@ bool isleapYear(const uint8_t);
 class RTClib {
   public:
 		// Get date and time snapshot
-    static DateTime now();
+    static DateTime now(TwoWire & _Wire = Wire);
 };
 
 // Eric's original code is everything below this line
@@ -64,6 +64,9 @@ class DS3231 {
 			
 		//Constructor
 		DS3231();
+		DS3231(TwoWire & w);
+
+		TwoWire & _Wire;
 
 		// Time-retrieval functions
     
@@ -84,6 +87,10 @@ class DS3231 {
 		// Note that none of these check for sensibility: You can set the
 		// date to July 42nd and strange things will probably result.
 		
+		// set epoch function gives the epoch as parameter and feeds the RTC
+		// epoch = UnixTime and starts at 01.01.1970 00:00:00
+		void setEpoch(time_t epoch = 0, bool flag_localtime = false);
+
 		void setSecond(byte Second); 
 			// In addition to setting the seconds, this clears the 
 			// "Oscillator Stop Flag".

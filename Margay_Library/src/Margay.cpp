@@ -381,64 +381,66 @@ void Margay::SDTest()
 	bool SDErrorTemp = false;
 	// bool SD_Test = true;
 
+  // SD_CD is pulled up: HIGH=1 if not present
+  // SD card being inserted closes a switch to pull it LOW
 	pinMode(SD_CD, INPUT);
-	bool CardPressent = digitalRead(SD_CD);
+	bool CardNotPresent = digitalRead(SD_CD);
 
 	Serial.print("SD: ");
 	delay(5); //DEBUG!
-	if(CardPressent) {
+	if(CardNotPresent) {
 		Serial.println(F(" NO CARD"));
-    	SDErrorTemp = true;
-    	SDError = true; //Card not inserted
+  	SDErrorTemp = true;
+  	SDError = true; //Card not inserted
 	}
 	else if (!SD.begin(SD_CS)) {
-    	OBError = true;
-    	SDErrorTemp = true;
-  	}
-
-  	if(!CardPressent) {
-  		SD.mkdir("NW");  //Create NW folder (if not already present)
-  		SD.chdir("/NW"); //Move file pointer into NW folder (at root level)
-  		SD.mkdir(SN); //Make directory with serial number as name
-  		SD.chdir(SN); //Move into this directory
-  		//Change directory to SN# named dir
-  		SD.mkdir("Logs"); //Use???
-		String FileNameTest = "HWTest";
-		(FileNameTest + ".txt").toCharArray(FileNameTestC, 11);
-		SD.remove(FileNameTestC); //Remove any previous files
-
-		randomSeed(analogRead(A7)); //Seed with a random process to try to endsure randomness
-		int RandVal = random(30557); //Generate a random number between 0 and 30557 (the number of words in Hamlet)
-		char RandDigits[6] = {0};
-		sprintf(RandDigits, "%d", RandVal); //Convert RandVal into a series of digits
-		int RandLength = (int)((ceil(log10(RandVal))+1)*sizeof(char)); //Find the length of the values in the array
-		File DataWrite = SD.open(FileNameTestC, FILE_WRITE);
-		if(DataWrite) {
-		DataWrite.println(RandVal);
-		DataWrite.println("\nHe was a man. Take him for all in all.");
-		DataWrite.println("I shall not look upon his like again.");
-		DataWrite.println("-Hamlet, Act 1, Scene 2");
-		}
-		DataWrite.close();
-		char TestDigits[6] = {0};
-		File DataRead = SD.open(FileNameTestC, FILE_READ);
-		if(DataRead) {
-		DataRead.read(TestDigits, RandLength);
-
-		for(int i = 0; i < RandLength - 1; i++){ //Test random value string
-		  if(TestDigits[i] != RandDigits[i]) {
-		    SDErrorTemp = true;
-		    OBError = true;
-		  }
-		}
-		}
-		DataRead.close();
-
-		keep_SPCR=SPCR; 
+  	OBError = true;
+  	SDErrorTemp = true;
 	}
+
+  // If card is present, do the following:
+	if(!CardNotPresent) {
+		SD.mkdir("NW");  //Create NW folder (if not already present)
+		SD.chdir("/NW"); //Move file pointer into NW folder (at root level)
+		SD.mkdir(SN); //Make directory with serial number as name
+		SD.chdir(SN); //Move into this directory
+		//Change directory to SN# named dir
+		SD.mkdir("Logs"); //Use???
+	  String FileNameTest = "HWTest";
+	  (FileNameTest + ".txt").toCharArray(FileNameTestC, 11);
+	  SD.remove(FileNameTestC); //Remove any previous files
+
+	  randomSeed(analogRead(A7)); //Seed with a random process to try to endsure randomness
+	  int RandVal = random(30557); //Generate a random number between 0 and 30557 (the number of words in Hamlet)
+	  char RandDigits[6] = {0};
+	  sprintf(RandDigits, "%d", RandVal); //Convert RandVal into a series of digits
+	  int RandLength = (int)((ceil(log10(RandVal))+1)*sizeof(char)); //Find the length of the values in the array
+	  File DataWrite = SD.open(FileNameTestC, FILE_WRITE);
+	  if(DataWrite) {
+		  DataWrite.println(RandVal);
+		  DataWrite.println("\nHe was a man. Take him for all in all.");
+		  DataWrite.println("I shall not look upon his like again.");
+		  DataWrite.println("-Hamlet, Act 1, Scene 2");
+	  }
+	  DataWrite.close();
+	  char TestDigits[6] = {0};
+	  File DataRead = SD.open(FileNameTestC, FILE_READ);
+	  if(DataRead) {
+    	DataRead.read(TestDigits, RandLength);
+		  for(int i = 0; i < RandLength - 1; i++){ //Test random value string
+		    if(TestDigits[i] != RandDigits[i]) {
+		      SDErrorTemp = true;
+		      OBError = true;
+		    }
+		  }
+	  }
+	  DataRead.close();
+
+	  keep_SPCR=SPCR; 
+  }
   
-	if(SDError && !CardPressent) Serial.println("FAIL");  //If card is inserted and still does not connect propperly, throw error
-  	else if(!SDError && !CardPressent) Serial.println("PASS");  //If card is inserted AND connectects propely return success 
+	if(SDError && !CardNotPresent) Serial.println("FAIL");  //If card is inserted and still does not connect propperly, throw error
+	else if(!SDError && !CardNotPresent) Serial.println("PASS");  //If card is inserted AND connectects propely return success 
 }
 
 void Margay::ClockTest() 
@@ -697,6 +699,22 @@ void Margay::Blink()
   }
 }
 
+void Margay::BlinkGood()
+{  
+  // Peppy blinky pattern to show that the logger has successfully initialized
+  digitalWrite(BlueLED,LOW);
+  delay(651);
+  digitalWrite(BlueLED,HIGH);
+  delay(300);
+  digitalWrite(BlueLED,LOW);
+  delay(100);
+  digitalWrite(BlueLED,HIGH);
+  delay(200);
+  digitalWrite(BlueLED,LOW);
+  delay(100);
+  digitalWrite(BlueLED,HIGH);
+}
+
 float Margay::GetVoltage()  //Get voltage from Ax pin
 {
 	float Val = adc.GetVoltage();
@@ -717,7 +735,7 @@ void Margay::Run(String (*Update)(void), unsigned long LogInterval) //Pass in fu
 		//Add inital data point 
 		AddDataPoint(Update);
 		NewLog = false;  //Clear flag once log is started 
-    	Blink();  //Alert user to start of log
+    	BlinkGood();  //Alert user to start of log
     	ResetWD(); //Clear alarm
 	}
 

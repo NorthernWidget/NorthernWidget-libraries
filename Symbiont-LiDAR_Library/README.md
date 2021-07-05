@@ -12,6 +12,8 @@ Interface with the [SymbiontLiDAR](#classSymbiontLiDAR) module.
 
 Library to communicate with the [SymbiontLiDAR](#classSymbiontLiDAR) module, which connects to a LiDAR Lite rangefinder.The Symbiont is equipped with capacitors to handle the large burst power draw from the LiDAR Lite, a MEMS accelerometer to note its orientation, a magnet to note a known orientation (often, but not necessarily, horizontal) and the ability to absorb occasional firmware issues that lead to system hangs. The leveling helps the user to calculate, for example, a water level when the sensor is palced on a cliff a tree next to the river but does not have water below it. The level loses absolute accuracy when near plumb, so a Hall-effect sensor connected to the magnet allows the user to set a zero value, thereby correcting for this. Managing failures of the LiDAR Lite within the Symbiont is essential, and the Symbiont therefore acts as a buffer to protect the data logger from raw sensor failures.
 
+[![DOI](https://zenodo.org/badge/260392682.svg)](https://zenodo.org/badge/latestdoi/260392682)
+
 ## Summary
 
  Members                        | Descriptions                                
@@ -23,9 +25,9 @@ Library to communicate with the [SymbiontLiDAR](#classSymbiontLiDAR) module, whi
 `public float `[`getRoll`](#classSymbiontLiDAR_1a3ed32c762addeec50be410aca132e16e)`()` | Return roll [deg].
 `public float `[`getPitch`](#classSymbiontLiDAR_1ad06bac488cb930345d023903e74844a3)`()` | Return pitch [deg].
 `public String `[`getHeader`](#classSymbiontLiDAR_1a3637c11f25bc19257458a1947f67cdb6)`()` | Return a comma-separated header: "Range [cm],Pitch [deg],Roll [deg],".
-`public String `[`getString`](#classSymbiontLiDAR_1a0f21c278f00301fd35955fa0311cd7f8)`(bool takeNewReadings)` | Return comma-separated data values.
+`public String `[`getString`](#classSymbiontLiDAR_1a856384a2e8afac718a88c9b22ad7338a)`(bool takeNewReadings)` | Return comma-separated data values.
 `public String `[`GetHeader`](#classSymbiontLiDAR_1a4c83d0aa98cc37aa76cff14a7ccc9e61)`()` | CapitalCase version of [getHeader()](#classSymbiontLiDAR_1a3637c11f25bc19257458a1947f67cdb6) for backwards compatibility.
-`public String `[`GetString`](#classSymbiontLiDAR_1a454c7b9749d3735178af599dd8cb3b79)`(bool takeNewReadings)` | CapitalCase version of [getString()](#classSymbiontLiDAR_1a0f21c278f00301fd35955fa0311cd7f8) for backwards compatibility.
+`public String `[`GetString`](#classSymbiontLiDAR_1ab25a1819d9246ffec7c0512622e1f51b)`(bool takeNewReadings)` | CapitalCase version of [getString()](#classSymbiontLiDAR_1a856384a2e8afac718a88c9b22ad7338a) for backwards compatibility.
 
 ## Members
 
@@ -62,7 +64,7 @@ Return pitch [deg].
 
 Return a comma-separated header: "Range [cm],Pitch [deg],Roll [deg],".
 
-#### `public String `[`getString`](#classSymbiontLiDAR_1a0f21c278f00301fd35955fa0311cd7f8)`(bool takeNewReadings)` 
+#### `public String `[`getString`](#classSymbiontLiDAR_1a856384a2e8afac718a88c9b22ad7338a)`(bool takeNewReadings)` 
 
 Return comma-separated data values.
 
@@ -74,9 +76,9 @@ This is the most likely function (alongside getHeader) for an end user to use. V
 
 CapitalCase version of [getHeader()](#classSymbiontLiDAR_1a3637c11f25bc19257458a1947f67cdb6) for backwards compatibility.
 
-#### `public String `[`GetString`](#classSymbiontLiDAR_1a454c7b9749d3735178af599dd8cb3b79)`(bool takeNewReadings)` 
+#### `public String `[`GetString`](#classSymbiontLiDAR_1ab25a1819d9246ffec7c0512622e1f51b)`(bool takeNewReadings)` 
 
-CapitalCase version of [getString()](#classSymbiontLiDAR_1a0f21c278f00301fd35955fa0311cd7f8) for backwards compatibility.
+CapitalCase version of [getString()](#classSymbiontLiDAR_1a856384a2e8afac718a88c9b22ad7338a) for backwards compatibility.
 
 #### Parameters
 * `takeNewReadings` if `true` run `updateMeasurements` before returning values. Otherwise, just return values.

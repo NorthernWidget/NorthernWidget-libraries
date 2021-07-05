@@ -1,3 +1,5 @@
+[![DOI](https://zenodo.org/badge/139644223.svg)](https://zenodo.org/badge/latestdoi/139644223)
+
 # Margay Logger Library
 This library is designed to facilitate the simple and modular usage of the Margay data logger
 

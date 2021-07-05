@@ -33,6 +33,8 @@ Distributed as-is; no warranty is given.
  * @details The Walrus is an encapsulated submersible
  * pressure and temperature sensor intended for water-level or barometric
  * monitoring.
+ *
+ * \verbatim [![DOI](https://zenodo.org/badge/219609527.svg)](https://zenodo.org/badge/latestdoi/219609527) \endverbatim
  */
 class Walrus
 {
