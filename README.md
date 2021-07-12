@@ -6,7 +6,7 @@ These libraries are all copies from their original sources. Most are from Northe
 
 ## Installation instructions
 
-**Note: the Arduino IDE needs to be installed on your machine before installing these libraries. If you do not yet have Arduino installed, you can download it [here](https://www.arduino.cc/en/main/software).**
+***Note: the Arduino IDE needs to be installed on your machine before installing these libraries. If you do not yet have Arduino installed, you can download it [here](https://www.arduino.cc/en/main/software).***
 
 This package bundles together many libraries for easy downloading. However, this means that you cannot use the [Arduino Library Manager](https://www.arduino.cc/en/guide/libraries#toc3) built into the [Arduino IDE](https://www.arduino.cc/en/main/software). Therefore, we have to use the older approach of copying the folders containing the library information to the folder containing your Arduino libraries.
 
@@ -53,6 +53,7 @@ To view the libraries on Mac, you have to open the contents of your **ArduinoNNN
 4. Open "NorthernWidget-libraries-master" to view all of its subfolders. Each is a library.
 5. Extract the subfolders within the "NorthernWidget-libraries-master" folder you would like to use to your Arduino "libraries" folder. You could also just extract all of them!
   * If this is not directly possible (perhaps for Mac), extract the contents to a temporary folder and then cut/paste them to your Arduino "libraries" folder.
+  * At the risk of redundancy, for the sake of clarity the "NorthernWidget-libraries-master" folder is not what should be directly in your Arduino "libraries" folder, rather the subfolders of "NorthernWidget-libraries-master" (e.g. "Margay_Library") are what should be in your Arduino "libraries" folder
 
 At this point, you should have all the libraries required to compile any Northern Widget code.
 
