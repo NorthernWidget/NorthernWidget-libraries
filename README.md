@@ -53,7 +53,7 @@ To view the libraries on Mac, you have to open the contents of your **ArduinoNNN
 4. Open "NorthernWidget-libraries-master" to view all of its subfolders. Each is a library.
 5. Extract the subfolders within the "NorthernWidget-libraries-master" folder you would like to use to your Arduino "libraries" folder. You could also just extract all of them!
   * If this is not directly possible (perhaps for Mac), extract the contents to a temporary folder and then cut/paste them to your Arduino "libraries" folder.
-  * At the risk of redundancy, for the sake of clarity the "NorthernWidget-libraries-master" folder is not what should be directly in your Arduino "libraries" folder, rather the subfolders of "NorthernWidget-libraries-master" (e.g. "Margay_Library") are what should be in your Arduino "libraries" folder
+  * For the sake of clarity at the risk of redundancy, the "NorthernWidget-libraries-master" folder is not what should be directly in your Arduino "libraries" folder, rather the subfolders of "NorthernWidget-libraries-master" (e.g. "Margay_Library") are what should be in your Arduino "libraries" folder
 
 At this point, you should have all the libraries required to compile any Northern Widget code.
 
