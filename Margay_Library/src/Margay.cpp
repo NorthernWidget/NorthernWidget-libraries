@@ -364,10 +364,10 @@ void Margay::I2Ctest()
     		I2C_Test = false;
     		SensorError = true;
 		}
-		externalI2C(OFF);
 	}
 
 	//Switch to connect to onboard I2C!
+	externalI2C(OFF);
 
 	for(int i = 0; i < NumADR_OB; i++) {
 		Wire.beginTransmission(I2C_ADR_OB[i]);
