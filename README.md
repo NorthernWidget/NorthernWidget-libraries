@@ -16,13 +16,14 @@ Your Arduino libraries are held in a folder called, conveniently, **libraries**.
 
 ### Linux
 
-**Installation via direct download**
+**Installation via direct download:**
 
 *Highly recommended: download most recent version for your OS (most likely "Linux 64 bit") from https://www.arduino.cc/en/main/software*
 
 *Libraries location:* `$HOME/Arduino/libraries`
 
-**Installation via apt**
+**Installation via apt:**
+
 You can use:
 ```
 apt install arduino
@@ -32,6 +33,8 @@ This can help to ensure that you have important core libraries, but this version
 *Libraries location:* `$HOME/.arduino/libraries`
 
 ### Windows
+
+To view the libraries on Windows, you can simply just navigate to them via the main directories.
 
 *Libraries location:* `'My Documents\Arduino\libraries'`
 
