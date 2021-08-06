@@ -34,7 +34,7 @@ This can help to ensure that you have important core libraries, but this version
 
 ### Windows
 
-To view the libraries on Windows, you can simply just navigate to them via the main directories.
+To view the libraries on Windows, you can simply navigate to them through the File Explorer or otherwise.
 
 *Libraries location:* `'My Documents\Arduino\libraries'`
 
