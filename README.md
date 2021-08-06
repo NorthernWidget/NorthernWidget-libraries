@@ -16,13 +16,13 @@ Your Arduino libraries are held in a folder called, conveniently, **libraries**.
 
 ### Linux
 
-**Installation via direct download:**
+***Installation via direct download:***
 
-*Highly recommended: download most recent version for your OS (most likely "Linux 64 bit") from https://www.arduino.cc/en/main/software*
+Highly recommended: download most recent version for your OS (most likely "Linux 64 bit") from https://www.arduino.cc/en/main/software
 
 *Libraries location:* `$HOME/Arduino/libraries`
 
-**Installation via apt:**
+***Installation via apt:***
 
 You can use:
 ```
@@ -60,7 +60,7 @@ To view the libraries on Mac, you have to open the contents of your **ArduinoNNN
 
 At this point, you should have all the libraries required to compile any Northern Widget code.
 
-If you are running the Arduino IDE, you may need to restart it in order to for the changes to take effect.
+***Note: if you are running the Arduino IDE, you may need to restart it in order to for the changes to take effect.***
 
 Repeat these steps if you would like to obtain updated library versions.
 
