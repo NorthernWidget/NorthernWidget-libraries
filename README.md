@@ -6,7 +6,7 @@ These libraries are all copies from their original sources. Most are from Northe
 
 ## Installation instructions
 
-***Note: the Arduino IDE needs to be installed on your machine before installing these libraries. If you do not yet have Arduino installed, you can download it [here](https://www.arduino.cc/en/main/software).***
+***Note: The Arduino IDE needs to be installed on your machine before installing these libraries. If you do not yet have Arduino installed, you can download it [here](https://www.arduino.cc/en/main/software).***
 
 This package bundles together many libraries for easy downloading. However, this means that you cannot use the [Arduino Library Manager](https://www.arduino.cc/en/guide/libraries#toc3) built into the [Arduino IDE](https://www.arduino.cc/en/main/software). Therefore, we have to use the older approach of copying the folders containing the library information to the folder containing your Arduino libraries.
 
@@ -60,7 +60,7 @@ To view the libraries on Mac, you have to open the contents of your **ArduinoNNN
 
 At this point, you should have all the libraries required to compile any Northern Widget code.
 
-***Note: if you are running the Arduino IDE, you may need to restart it in order to for the changes to take effect.***
+***Note: If you are running the Arduino IDE, you may need to restart it in order to for the changes to take effect.***
 
 Repeat these steps if you would like to obtain updated library versions.
 
