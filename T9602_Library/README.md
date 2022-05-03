@@ -1,8 +1,10 @@
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.6338379.svg)](https://doi.org/10.5281/zenodo.6338379)
+
 # T9602_Library
 
 ***Arduino library interface for the [Telaire T9602 humidity and temperature sensor](https://www.amphenol-sensors.com/en/telaire/humidity/527-humidity-sensors/3224-t9602)***
 
-![T9602 from Telaire](https://www.amphenol-sensors.com/images/stories/moisture-humidity/main-T9602-Mod-4.png)
+![T9602 from Telaire](https://f.hubspotusercontent40.net/hubfs/9035299/main-T9602-Mod-4.png)
 
 ***T9602 sensor.*** *Image from Amphenol/Telaire (see link above).*
 
@@ -65,7 +67,7 @@ You should be able to use any standard Arduino device to connect to the T9602 an
 
 ### Very simple Arduino code
 
-This code is intended for any generic Arduino system.
+This code is intended for any generic Arduino system. It is not proven.
 
 ```c++
 // Include the T9602 library
@@ -148,6 +150,6 @@ void initialize(){
 
 Support for this project provided by:
 
-<img src="https://pbs.twimg.com/profile_images/1139626463932637186/qCak0yvY_400x400.png" alt="UMN ESCI" width="240px">
+<img src="https://pbs.twimg.com/profile_images/1445421246045360133/zQtKhpkT_400x400.jpg" alt="UMN ESCI" width="240px">
 
 <img src="https://www.nsf.gov/news/mmg/media/images/nsf_logo_f_ba321daf-8607-41d7-94bc-1db6039d7893.jpg" alt="NSF" width="240px">

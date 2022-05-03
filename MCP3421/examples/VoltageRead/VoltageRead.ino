@@ -1,6 +1,6 @@
 #include <MCP3421.h>
 
-MCP3421 adc; //Initialize MCP3421 with default address, 0x6A
+MCP3421 adc; //Initialize MCP3425 with default address, 0x6A
 
 void setup() {
   Serial.begin(9600); //Begin serial comunication

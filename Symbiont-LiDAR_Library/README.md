@@ -2,7 +2,24 @@
 
  Members                        | Descriptions                                
 --------------------------------|---------------------------------------------
+`define `[`ADR_DEFAULT`](#SymbiontLiDAR_8h_1a0adff53210e44ca7d64907c867f0f7c2)            | 
+`define `[`sensitivityBalanced`](#SymbiontLiDAR_8h_1ac5f84af277667e482a5c7da45bd05279)            | 
+`define `[`sensitivityHigh`](#SymbiontLiDAR_8h_1a0eb3f50ee661ddbb02c717f0c7de7103)            | 
+`define `[`sensitivityLow`](#SymbiontLiDAR_8h_1ae15ccf3e0b28d824d29aa6a5a576b406)            | 
+`define `[`sensitivityMaxRange`](#SymbiontLiDAR_8h_1ac5d85ad8b1ed6450af2dca73d8cce8bb)            | 
 `class `[`SymbiontLiDAR`](#classSymbiontLiDAR) | Arduino library for the Symbiont board, which manages a LiDAR Lite unit (roll/pitch, firmware lock/reset, power supply).
+
+## Members
+
+#### `define `[`ADR_DEFAULT`](#SymbiontLiDAR_8h_1a0adff53210e44ca7d64907c867f0f7c2) 
+
+#### `define `[`sensitivityBalanced`](#SymbiontLiDAR_8h_1ac5f84af277667e482a5c7da45bd05279) 
+
+#### `define `[`sensitivityHigh`](#SymbiontLiDAR_8h_1a0eb3f50ee661ddbb02c717f0c7de7103) 
+
+#### `define `[`sensitivityLow`](#SymbiontLiDAR_8h_1ae15ccf3e0b28d824d29aa6a5a576b406) 
+
+#### `define `[`sensitivityMaxRange`](#SymbiontLiDAR_8h_1ac5d85ad8b1ed6450af2dca73d8cce8bb) 
 
 # class `SymbiontLiDAR` 
 

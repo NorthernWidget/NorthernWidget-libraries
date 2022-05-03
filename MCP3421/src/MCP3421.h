@@ -44,7 +44,10 @@ class MCP3421
   private:
     int ADR;
     int GetConfig();
+    int measurement_duration_ms = 5; // time to wait to complete measurement
+                                     // default to 12 bits
 
 };
 
 #endif
+

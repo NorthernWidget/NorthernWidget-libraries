@@ -1,0 +1,11 @@
+cff-version: 1.2.0
+message: "If you use this firmware, please cite it as below."
+authors:
+- family-names: "Schulz"
+  given-names: "Bobby"
+  orcid: "https://orcid.org/0000-0002-9272-4756"
+title: "MCP3421"
+version: 1.0.0
+doi: 10.5281/zenodo.6338647
+date-released: 2022-03-08
+url: "https://github.com/NorthernWidget/T9602_Library"

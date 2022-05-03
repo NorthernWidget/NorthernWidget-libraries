@@ -20,13 +20,21 @@ Distributed as-is; no warranty is given.
 MCP3421::MCP3421(int _ADR)
 {
   ADR = _ADR; 
-  Wire.begin();  
+  #if defined(ARDUINO) && ARDUINO >= 100 
+    Wire.begin();
+  #elif defined(PARTICLE)
+    if(!Wire.isEnabled()) Wire.begin(); //Only initialize I2C if not done already //INCLUDE FOR USE WITH PARTICLE 
+  #endif
 }
 
 MCP3421::MCP3421(void)  
 {
   ADR = 0x6A; //Use 0x6A as Address by default  
-  Wire.begin();  
+  #if defined(ARDUINO) && ARDUINO >= 100 
+    Wire.begin();
+  #elif defined(PARTICLE)
+    if(!Wire.isEnabled()) Wire.begin(); //Only initialize I2C if not done already //INCLUDE FOR USE WITH PARTICLE 
+  #endif
 }
 
 int MCP3421::Begin(int _ADR) //Initialize the system in 1x gain, with 12 bit resolution, continuious conversions
@@ -38,7 +46,7 @@ int MCP3421::Begin(int _ADR) //Initialize the system in 1x gain, with 12 bit res
 int MCP3421::Begin(void) //Initialize the system in 1x gain, with 12 bit resolution, continuious conversions
 {
   SetGain(1);
-  SetResolution(12);
+  SetResolution(12); // measurement duration defaults to that required for 12 bit
   SetMode(CONTINUIOUS);
   Wire.beginTransmission(ADR);
   return Wire.endTransmission(); //Return I2C status 
@@ -62,6 +70,8 @@ long MCP3421::GetVoltageRaw(bool WaitForVal) {
       Config = GetConfig(); //Test register for new value to be read 
     }
 
+  delay(measurement_duration_ms); // Wait the requisite amount of time to take a measurement
+
   Wire.requestFrom(ADR, 4);
   
   if(Wire.available() == 4) //Get data bytes, 3 bytes of potential data and configuration register 
@@ -79,12 +89,12 @@ long MCP3421::GetVoltageRaw(bool WaitForVal) {
   if(NumBits == 14) RawADC = ((Data[0] & 0x3F) << 8) + Data[1];
   if(NumBits == 16) RawADC = ((Data[0] & 0xFF) << 8) + Data[1];
   if(NumBits == 18) RawADC = ((long(Data[0]) & 0x03) << 16) + (long(Data[1]) << 8) + Data[2];
-  
+    
   if(RawADC > pow(2, NumBits)/2 - 1) //REMOVE??
   {
     RawADC -= pow(2, NumBits) - 1;
   }
-
+  
   Config = GetConfig();  //Get congiuration register to do bit masking with
   Wire.beginTransmission(ADR);
   Wire.write(Config & 0xEF); //Clear conversion bit to ensure result is not reread 
@@ -131,6 +141,20 @@ int MCP3421::SetResolution(int DesiredResolution) {
   boolean ValidResolution = false;
   for(int i = 0; i < 4; i++){ //Test if resolution value is valid
     if(12 + 2*i == DesiredResolution) ValidResolution = true;
+  }
+
+  // Set measurement duration based on resolution  
+  if(DesiredResolution == 12){
+    measurement_duration_ms = 5;
+  }
+  else if(DesiredResolution == 14){
+    measurement_duration_ms = 17;
+  }
+  else if(DesiredResolution == 16){
+    measurement_duration_ms = 67;
+  }
+  else if(DesiredResolution == 18){
+    measurement_duration_ms = 267;
   }
 
   if(ValidResolution){ //If resolution value is valid, attempt to set new resolution
