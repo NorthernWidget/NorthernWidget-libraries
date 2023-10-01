@@ -73,7 +73,7 @@ class Margay
 
 	public:
 		Margay(board model_ = MODEL_2v2, build specs_ = BUILD_B);
-    int begin(uint8_t *Vals, uint8_t numVals, String header_);
+	    int begin(uint8_t *Vals, uint8_t numVals, String header_);
 		int begin(String header_ = "");
 
 		int logStr(String val);
@@ -98,7 +98,7 @@ class Margay
 
 		//Pin definitions
 		int SD_CS = 4;
-		uint8_t BuiltInLED = 20;
+		uint8_t AuxLED = 20;
 		uint8_t RedLED = 13;
 		uint8_t GreenLED = 15;
 		uint8_t BlueLED = 14;
@@ -133,7 +133,7 @@ class Margay
 		static void isr1();
 		static void isr2();
 		static Margay* selfPointer;
-    static void dateTimeSD(uint16_t* date, uint16_t* time);
+	    static void dateTimeSD(uint16_t* date, uint16_t* time);
 		void dateTimeSD_Glob(uint16_t* date, uint16_t* time);
 	    void switchExternalI2C(bool desiredState);
 		void sleepNow();

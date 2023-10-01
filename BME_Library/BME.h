@@ -11,6 +11,13 @@ class BME
 	public:
 		BME();
 		uint8_t begin(uint8_t ADR_ = 0x77); //use default address
+		//
+		float getPressure();
+		float getHumidity();
+		float getTemperature();
+		String getString();
+		String getHeader();
+		// PascalCase for backwards compatibility; may deprecate sometime
 		float GetPressure();
 		float GetHumidity();
 		float GetTemperature();

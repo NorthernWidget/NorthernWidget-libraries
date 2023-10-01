@@ -52,7 +52,7 @@ int MCP3421::Begin(void) //Initialize the system in 1x gain, with 12 bit resolut
   return Wire.endTransmission(); //Return I2C status 
 }
 
-//Returns the bit value from the conversion, from 0 to 2^n
+//Returns the bit value from the conversion, from 0 to 2^n - Defaults to waiting for updated value
 long MCP3421::GetVoltageRaw(bool WaitForVal) {
   int Data[4];
   
@@ -65,12 +65,10 @@ long MCP3421::GetVoltageRaw(bool WaitForVal) {
     delay(1);
 
   }
-
-    while((Config & 0x80) != 0 && WaitForVal == true) { //Wait for next conversion (for both single shot or continuious), only if told to wait for new value
+    unsigned long localTime = millis(); 
+    while((Config & 0x80) != 0 && WaitForVal == true && (millis() - localTime) < 275) { //Wait for next conversion (for both single shot or continuious), only if told to wait for new value, or 275ms 
       Config = GetConfig(); //Test register for new value to be read 
     }
-
-  delay(measurement_duration_ms); // Wait the requisite amount of time to take a measurement
 
   Wire.requestFrom(ADR, 4);
   
@@ -89,8 +87,12 @@ long MCP3421::GetVoltageRaw(bool WaitForVal) {
   if(NumBits == 14) RawADC = ((Data[0] & 0x3F) << 8) + Data[1];
   if(NumBits == 16) RawADC = ((Data[0] & 0xFF) << 8) + Data[1];
   if(NumBits == 18) RawADC = ((long(Data[0]) & 0x03) << 16) + (long(Data[1]) << 8) + Data[2];
-    
-  if(RawADC > pow(2, NumBits)/2 - 1) //REMOVE??
+  // if(NumBits == 12) RawADC = ((Data[0]) << 8) + Data[1];
+  // if(NumBits == 14) RawADC = ((Data[0]) << 8) + Data[1];
+  // if(NumBits == 16) RawADC = ((Data[0]) << 8) + Data[1];
+  // if(NumBits == 18) RawADC = ((long(Data[0])) << 16) + (long(Data[1]) << 8) + Data[2];
+  
+  if(RawADC > pow(2, NumBits)/2 - 1) //REMOVE?? //Convert negative values to positive in order to measure abs differential only
   {
     RawADC -= pow(2, NumBits) - 1;
   }
@@ -103,7 +105,7 @@ long MCP3421::GetVoltageRaw(bool WaitForVal) {
   return RawADC;  //return raw result
 }
 
-//Returns float voltage value in volts
+//Returns float voltage value in volts - Defaults to waiting for updated value
 float MCP3421::GetVoltage(bool WaitForVal) {
   long Raw = GetVoltageRaw(WaitForVal); //Get the raw bits, pass on stale value flag
   int Config = GetConfig(); //Get configuration register 
@@ -141,20 +143,6 @@ int MCP3421::SetResolution(int DesiredResolution) {
   boolean ValidResolution = false;
   for(int i = 0; i < 4; i++){ //Test if resolution value is valid
     if(12 + 2*i == DesiredResolution) ValidResolution = true;
-  }
-
-  // Set measurement duration based on resolution  
-  if(DesiredResolution == 12){
-    measurement_duration_ms = 5;
-  }
-  else if(DesiredResolution == 14){
-    measurement_duration_ms = 17;
-  }
-  else if(DesiredResolution == 16){
-    measurement_duration_ms = 67;
-  }
-  else if(DesiredResolution == 18){
-    measurement_duration_ms = 267;
   }
 
   if(ValidResolution){ //If resolution value is valid, attempt to set new resolution

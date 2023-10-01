@@ -33,7 +33,7 @@ class MCP3421
 
     long GetVoltageRaw(bool WaitForVal = true); //Force new values by default  
 
-    float GetVoltage(bool WaitForVal = false); //Force new values by default
+    float GetVoltage(bool WaitForVal = true); //Force new values by default
 
     int SetGain(int DesiredGain);
 
@@ -44,8 +44,6 @@ class MCP3421
   private:
     int ADR;
     int GetConfig();
-    int measurement_duration_ms = 5; // time to wait to complete measurement
-                                     // default to 12 bits
 
 };
 
