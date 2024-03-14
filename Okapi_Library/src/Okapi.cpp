@@ -17,6 +17,11 @@
 
 volatile bool ManualLog = false; //Global for interrupt access
 
+volatile uint8_t ExtIntPin = 255; // Sets external interrupt number; 255 for none
+String ext_int_header_entry;
+volatile bool ExtIntTripped = false; // Global for the external interrupt
+volatile uint16_t ExtInt_count = 0; // Global for the external interrupt
+
 
 Okapi* Okapi::selfPointer;
 
@@ -52,7 +57,7 @@ Okapi::Okapi(board Model_, build Specs_) : ADC_OB(0x48), ADC_Ext(0x49), IO(0x20)
 	Specs = Specs_; //Store build info locally
 }
 
-int Okapi::begin(uint8_t *Vals, uint8_t NumVals, String Header_)
+int Okapi::begin(uint8_t *Vals, uint8_t NumVals, String header_)
 {
 	pinMode(C0, OUTPUT);  //Allow for high power control
 	pinMode(C1, OUTPUT);
@@ -86,7 +91,15 @@ int Okapi::begin(uint8_t *Vals, uint8_t NumVals, String Header_)
 	memcpy(I2C_ADR, Vals, sizeof(I2C_ADR)); //Copy array
 	// memcpy(I2C_ADR, Vals, NumVals); //Copy array  //DEBUG??
 	NumADR = NumVals; //Copy length of array
-	Header = Header_; //Copy user defined header
+	// Header = Header_; //Copy user defined header
+	if (ExtIntPin == 255)
+	{
+		Header = header_; //Copy user defined header
+	}
+	else
+	{
+		Header = header_ + ext_int_header_entry;
+  }
 
 	I2CState(INTERNAL);
 	// NumADR_OB = 2; //DEBUG!
@@ -168,6 +181,13 @@ int Okapi::begin(uint8_t *Vals, uint8_t NumVals, String Header_)
 
 	pinMode(RTCInt, INPUT_PULLUP);
 	pinMode(LogInt, INPUT);
+
+	if (ExtIntPin != 255) {
+		pinMode(ExtIntPin, INPUT);
+		digitalWrite(ExtIntPin, HIGH);
+		attachInterrupt(digitalPinToInterrupt(ExtIntPin), Okapi::isr2, FALLING);
+	}
+
 
 	I2CTest();
 	ClockTest();
@@ -691,7 +711,9 @@ uint8_t Okapi::SetVoltage(float Val)  //Interpolated nearest value from float
 
 float Okapi::GetVoltage(uint8_t Pin)  //Get voltage external ADC from specified pin
 {
+	I2CState(INTERNAL);
 	float Val = ADC_Ext.readADC_SingleEnded(Pin)*0.1875;
+	I2CState(EXTERNAL);
 	return Val;
 }
 
@@ -711,7 +733,7 @@ void Okapi::Run(String (*Update)(void), unsigned long LogInterval) //Pass in fun
 		AddDataPoint(Update);
 		NewLog = false;  //Clear flag once log is started
     	Blink();  //Alert user to start of log
-    	// ResetWD(); //Clear alarm
+    	ResetWD(); //Clear alarm
 	}
 
 	if(LogEvent) {
@@ -719,7 +741,8 @@ void Okapi::Run(String (*Update)(void), unsigned long LogInterval) //Pass in fun
 		// Serial.println("Log!"); //DEBUG!
 		// RTC.setAlarm(LogInterval);  //Set/reset alarm //DEBUG!
 		AddDataPoint(Update); //Write values to SD
-		if(LogCount >= LogCountPush) {  //REPLACE WITH TIMER TEST!
+		if(LogCount >= LogCountPush && PowerState == 0) {  //If enough logs have been recorded and main battery power is available - backhaul //REPLACE WITH TIMER TEST!
+			IO.digitalWrite(FeatherEN, HIGH, MCP23018::Ports::B); //Turn on Feather power 
 			// for(int i = 0; i < 10; i++) {  //DEBUG!
 			// 	Serial.println("START BACKHAUL"); //DEBUG!
 			// 	delay(100);
@@ -752,14 +775,23 @@ void Okapi::Run(String (*Update)(void), unsigned long LogInterval) //Pass in fun
 		// Serial.println("BANG!"); //DEBUG!
 		RTC.setAlarm(LogInterval);  //Set/reset alarm
 		// Serial.println("ResetTimer"); //DEBUG!
-		// ResetWD(); //Clear alarm
+		ResetWD(); //Clear alarm
 	}
 
 	if(ManualLog) {  //Write data to SD card without interrupting existing timing cycle
 		// Serial.println("Click!"); //DEBUG!
 		AddDataPoint(Update); //write values to SD
 		ManualLog = false; //Clear log flag
-		// ResetWD(); //Clear alarm
+		ResetWD(); //Clear alarm
+	}
+
+	if(ExtIntTripped) {  // Defaults to just counter for now
+		// Serial.println("TIP!"); //DEBUG!
+    ExtInt_count ++;
+		ExtIntTripped = false; // Clear interrupt flag flag
+		ResetWD(); //Clear alarm
+		delay(150); //Hard-code for now; tipping bucket "debounce"
+    attachInterrupt(digitalPinToInterrupt(ExtIntPin), Okapi::isr2, FALLING);
 	}
 
 	if(!digitalRead(RTCInt)) {  //Catch alarm if not reset properly
@@ -777,23 +809,25 @@ void Okapi::Run(String (*Update)(void), unsigned long LogInterval) //Pass in fun
 	delay(1);
 }
 
-// void Okapi::ResetWD()  //Send a pulse to "feed" the watchdog timer
-// {
-// 	digitalWrite(WDHold, HIGH); //Set DONE pin high
-// 	delayMicroseconds(5); //Wait a short pulse
-// 	digitalWrite(WDHold, LOW);
-// }
+void Okapi::ResetWD()  //Send a pulse to "feed" the watchdog timer
+{
+	digitalWrite(WDHold, HIGH); //Set DONE pin high
+	delayMicroseconds(5); //Wait a short pulse
+	digitalWrite(WDHold, LOW);
+}
 
 void Okapi::AddDataPoint(String (*Update)(void)) //Reads new data and writes data to SD
 {
 	String Data = "";
-	I2CState(INTERNAL);  //DEBUG!
-	EnviroSense.begin(0x77); //Re-initialize BME280
-	// Serial.println("Called Update"); //DEBUG!
+	// I2CState(INTERNAL);  //DEBUG!
+	// // PowerAux(ON); 
+	// EnviroSense.begin(0x77); //Re-initialize BME280
+	// // Serial.println("Called Update"); //DEBUG!
 	I2CState(EXTERNAL);
 	Data = (*Update)(); //Run external update function
 	// Serial.println("Request OB Vals"); //DEBUG!
 	I2CState(INTERNAL);  //DEBUG!
+	EnviroSense.begin(0x77); //DEBUG!
 	Data = GetOnBoardVals() + Data; //Append on board readings
 	// Serial.println("Got OB Vals");  //DEBUG!
 	LogStr(Data);
@@ -813,6 +847,35 @@ void Okapi::Log()
 	//Write global Data to SD
 	LogEvent = true; //Set flag for a log event
 	AwakeCount = 0;
+}
+
+void Okapi::extIntCounter()
+{
+  // ISR for an external event waking the logger
+  detachInterrupt(digitalPinToInterrupt(ExtIntPin));
+  ExtIntTripped = true; // Set flag to just increment the counter and return to sleep
+}
+
+// ExtInt functions
+void Okapi::setExtInt(uint8_t n, String header_entry)
+{
+  ExtIntPin = n;
+  ext_int_header_entry = header_entry;
+}
+
+uint16_t Okapi::getExtIntCount(bool reset0)
+{
+  uint16_t out = ExtInt_count;
+  if (reset0)
+  {
+    resetExtIntCount(0);
+  }
+  return out;
+}
+
+void Okapi::resetExtIntCount(uint16_t start)
+{
+    ExtInt_count = start;
 }
 
 uint8_t Okapi::PowerAuto()
@@ -893,6 +956,7 @@ void Okapi::isr0() { selfPointer->ButtonLog(); }
 
 // ISR(PCINT0_vect) {
 void Okapi::isr1() { selfPointer->Log(); }
+void Okapi::isr2() { selfPointer->extIntCounter(); }
 
 //Low Power functions
 void Okapi::sleepNow()         // here we put the arduino to sleep
@@ -1018,7 +1082,7 @@ void Okapi::turnOnSDcard()
 	// digitalWrite(SD_CS, HIGH);
 	// digitalWrite(Ext3v3Ctrl, HIGH);  //turn off external 3v3 rail
 	// digitalWrite(BatSwitch, HIGH); //Turn off battery connection to sense divider
-	PowerAuto(); //Fix??
+	PowerState = PowerAuto(); //Fix??
 	// PowerOB(ON); //Turn on battery connection to sense divider
 	// PowerAux(ON); //turn on external 3v3 rail
 	delay(6);                                            // let the card settle

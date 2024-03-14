@@ -106,7 +106,7 @@ class Okapi
      * @param[in] NumVals: The length of the *Vals list
      * @param[in] Header_: A header string for the data file
      */
-		int begin(uint8_t *Vals, uint8_t NumVals, String Header_);
+		int begin(uint8_t *Vals, uint8_t NumVals, String header_);
     /**
      * @brief Begin by passing a header string; default empty
      *
@@ -190,7 +190,7 @@ class Okapi
 		// float GetBatPer();
 		// void GetPowerStats(); //Get all voltage and current values, converter/solar states, etc //ADD!!!!!!!!
 
-		// void ResetWD();
+		void ResetWD();
 		// void PowerOB(bool State);
 
     /**
@@ -213,6 +213,9 @@ class Okapi
      */
 		void I2CState(bool State); //Use on board of external I2C
 
+		void setExtInt(uint8_t n, String header_entry = "nInterrupts,");
+		uint16_t getExtIntCount(bool reset0 = true);
+		void resetExtIntCount(uint16_t start = 0);
     //////////////////////////////
 		// Pin definitions - Public //
     //////////////////////////////
@@ -254,7 +257,7 @@ class Okapi
     /// Interrupt from Log button **Pin 2** ***DIFFERENT IN CPP!!!!***
 		uint8_t LogInt = 2;
 
-		// uint8_t WDHold = 23; //ADD TO DOCUMENTATION!
+		uint8_t WDHold = 23; //ADD TO DOCUMENTATION!
 		// uint8_t BatSwitch = 22; //ADD TO DOCUMENTATION!
 
     /// USART Transmit
@@ -318,6 +321,7 @@ class Okapi
 		void virtual ButtonLog();
 		static void isr0();
 		static void isr1();
+		static void isr2();
 		static Okapi* selfPointer;
 
 		static void DateTimeSD(uint16_t* date, uint16_t* time);
@@ -333,6 +337,7 @@ class Okapi
 		// void PowerTest();
 		void EnviroStats();
 		int freeMemory(); //DEBUG!
+		void extIntCounter();
 
 		DS3231_Logger RTC;
 		// MCP3421 adc;
@@ -356,6 +361,7 @@ class Okapi
 		bool BatWarning = false;
 		float BatVoltageError = 3.3; //Low battery alert will trigger if voltage drops below this value
 		float BatPercentageWarning = 50; //Percentage at which a warning will be indicated
+		float PowerState = 0; //Keep track of what power mode the system is using when waking from sleep
 		String Header = "";
 		const char HexMap[16] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'}; //used for conversion to HEX of string
 		char SN[20] = {0}; //Used to store device serial number, 19 chars + null terminator
@@ -387,7 +393,7 @@ class Okapi
 		byte  keep_SPCR;
 		byte keep_ADCSRA;
 
-		uint16_t LogCountPush = 2; //Number of logs to take before sending data off
+		uint16_t LogCountPush = 5; //Number of logs to take before sending data off
 		uint16_t LogCount = 0; //Number of logs since last data write
 		uint16_t Index = 0; //Index of data entry USE???? FIX!
 		uint32_t SDIndex = 0; //Index of data point in SD card file
