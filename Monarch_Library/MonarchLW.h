@@ -53,6 +53,7 @@ class MonarchLW
 		// const float D = 9.093712E-07;
 		const float Beta = 3960; //Beta value for thermistor, MAKE NOT FLOAT??
 
+		const unsigned long timeout = 100; //Default to 100ms timeout for I2C
 		float TempConvert(float V, float Vcc, float R, float A, float B, float C, float D, float R25);
 		float TempConvert(float V, float Vcc, float R, float Beta, float R25);
 		unsigned int GetADC(unsigned int Num);

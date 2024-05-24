@@ -117,8 +117,9 @@ uint8_t DysonLW::WriteWord_LE(uint8_t Adr, uint8_t Command, unsigned int Data)  
 int DysonLW::ReadWord_LE(uint8_t Adr, uint8_t Command)  //Send command value, returns entire 16 bit word
 {
   bool Error = SendCommand(Adr, Command);
+  unsigned long localTime = millis();
   Wire.requestFrom(Adr, 2);
-  while(Wire.available() < 2); //Wait for incoming data
+  while(Wire.available() < 2 && (millis() - localTime) < timeout); //Wait for incoming data
   uint8_t ByteHigh = Wire.read();  //Read in high and low bytes (big endian)
   uint8_t ByteLow = Wire.read();
   // if(Error == true) return ((ByteHigh << 8) | ByteLow); //If read succeeded, return concatonated value
